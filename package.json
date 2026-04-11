@@ -2,48 +2,59 @@
   "name": "novo-ringo-bar",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "24.x"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
     "@sanity/client": "^5.4.2",
     "@sanity/eslint-config-studio": "^2.0.1",
     "@sanity/image-url": "^1.0.2",
-    "@sanity/language-filter": "^3.1.2",
+    "@sanity/language-filter": "^3.2.2",
     "@sanity/vision": "^3.9.0",
     "@types/node": "18.15.12",
     "@types/react": "18.0.37",
     "@types/react-dom": "18.0.11",
     "autoprefixer": "10.4.14",
     "next": "13.3.0",
-    "next-sanity-image": "^6.0.0",
+    "next-sanity-image": "^6.2.0",
     "postcss": "8.4.23",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-icons": "^4.8.0",
-    "sanity": "^3.9.0",
-    "styled-components": "^5.3.9",
+    "sanity": "^3.99.0",
+    "styled-components": "^6.1.15",
     "swiper": "^9.2.4",
     "tailwindcss": "3.3.1",
     "typescript": "5.0.4"
   },
   "devDependencies": {
+    "@sanity/eslint-config-studio": "^2.0.1",
+    "@types/node": "^24.0.0",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
     "@typescript-eslint/eslint-plugin": "^5.59.0",
     "@typescript-eslint/parser": "^5.59.0",
-    "cssnano": "^6.0.0",
+    "autoprefixer": "^10.4.14",
+    "cssnano": "^6.1.2",
     "eslint": "^8.38.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^17.0.0",
-    "eslint-config-next": "^13.3.0",
+    "eslint-config-next": "13.3.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-jsx-a11y": "^6.7.1",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "prettier": "^2.8.7"
+    "postcss": "^8.4.31",
+    "prettier": "^2.8.7",
+    "tailwindcss": "3.3.1",
+    "typescript": "^5.1.0"
   }
 }
