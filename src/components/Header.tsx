@@ -69,7 +69,7 @@ const Header: React.FC<HeaderProps> = props => {
               isScrolled && 'text-3xl'
             } font-bold`}
           >
-            RingoBar
+            Ringo Pizzeria
           </Link>
         </div>
 
