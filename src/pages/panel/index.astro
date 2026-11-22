@@ -33,6 +33,7 @@ const lg = await getImage({ src: logo, width: 192, format: "png" });
   <symbol id="i-img" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 9"/></symbol>
   <symbol id="i-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15l6-6 6 6"/></symbol>
   <symbol id="i-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></symbol>
+  <symbol id="i-qr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3M21 14v.01M17 21h4v-4M14 18v3"/></symbol>
   <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></symbol>
 </svg>
 
@@ -158,6 +159,7 @@ const lg = await getImage({ src: logo, width: 192, format: "png" });
         <a class="tile" href="#horario"><span class="ic"><svg><use href="#i-clock"/></svg></span><b>Horario</b><small>Días y horas</small></a>
         <a class="tile" href="#cierres"><span class="ic"><svg><use href="#i-sun"/></svg></span><b>Vacaciones y cierres</b><small>Avisa a tus clientes</small></a>
         <a class="tile" href="#categorias"><span class="ic"><svg><use href="#i-img"/></svg></span><b>Categorías</b><small>Pizzas, entrantes…</small></a>
+        <a class="tile wide" href="/panel/qr"><span class="ic"><svg><use href="#i-qr"/></svg></span><span><b>Imprimir QR</b><small>Cartel, tarjetas de mesa y pegatinas con tu carta</small></span></a>
       </div>
       <h2 class="sec">Últimos cambios</h2>
       ${S.changes.length ? `<ul class="log">${(() => { const ok = undoable(); return S.changes.slice(0, 8).map((c) => `<li><span>${esc(c.summary)}<small>${esc(ago(c.at))}</small></span>${ok.has(c.id) ? `<button class="undo" type="button" data-undo="${esc(c.id)}">${c.summary.startsWith("Deshecho:") ? "Rehacer" : "Deshacer"}</button>` : ""}</li>`).join(""); })()}</ul>` : `<p class="empty-note">Todavía no hay cambios.</p>`}
