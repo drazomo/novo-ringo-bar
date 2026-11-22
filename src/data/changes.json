@@ -1,5 +1,29 @@
 [
   {
+    "id": "c9d3d8e06e",
+    "at": "2026-11-22T13:43:29.423Z",
+    "who": "mark@thebrandinghouseusa.com",
+    "summary": "Deshecho: Ringo: precio 10,50 € → 11,00 €",
+    "kind": "item",
+    "target": "ringo",
+    "before": {
+      "id": "ringo",
+      "cat": "pizzas",
+      "name": "Ringo",
+      "name_en": "Ringo",
+      "desc": "Base de tomate, mozzarella, champiñones, olivas negras, gorgonzola, longaniza, parmesano y aceite de ajo.",
+      "desc_en": "Tomato sauce, olive + garlic oil, mozzarella, mushrooms, black olives, gorgonzola, longaniza, and parmesan.",
+      "price": 11.5,
+      "tags": [
+        "casa"
+      ],
+      "status": "on",
+      "soldOutOn": null,
+      "photo": "ringo.jpg"
+    },
+    "index": 0
+  },
+  {
     "id": "0f30805172",
     "at": "2026-11-22T13:42:15.631Z",
     "who": "mark@thebrandinghouseusa.com",
