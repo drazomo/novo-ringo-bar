@@ -22,13 +22,20 @@ Last updated: 22 Nov 2026, by Hermy (TBH) for Mark Rasavong.
    - `RESEND_API_KEY`: sending-only, ringopizzeria.com only
 3. DONE: Resend domain ringopizzeria.com (region eu-west-1) is in Mark's Resend team "thebrandinghouseusa". Its DNS records were added at Spaceship: `resend._domainkey` TXT, `rsend` + `send` CNAME, `_dmarc` TXT. A login email to Mark was Delivered.
 4. DONE: Preview tested by Mark. A real sign-in worked, the edits committed to `v3`, and undo worked.
-5. TODO: Decide on the Vercel plan. Hobby is non-commercial only, so Pro is recommended. Then merge `v3` → `main` and check production.
+5. DONE (22 Nov 2026): Mark chose to stay on Vercel Hobby. `v3` was merged to `main` and is live on www.ringopizzeria.com. The old site is tagged `old-nextjs-site` for rollback.
 6. After launch:
    - Google Search Console: add the property and submit `sitemap-index.xml`.
    - Bing Webmaster Tools: import from Search Console. ChatGPT search relies on Bing.
    - Google Business Profile: website = https://www.ringopizzeria.com, menu link = https://www.ringopizzeria.com/carta, order links = Glovo / Uber Eats.
    - Vercel: turn on Web Analytics.
    - Optional: delete the leftover branch-specific Preview (v3) copies of PANEL_SECRET / PANEL_MAIL_FROM in Vercel. They are harmless.
+
+## Imprimir QR (panel → /panel/qr), live since 22 Nov 2026
+- It has three A4 sheets: a poster (1), table cards (4) and stickers (12). Each has its own print button; only that sheet prints, as one A4 page.
+- It also offers PNG and SVG downloads for print shops (`/panel/qr-carta.png`, `/panel/qr-carta.svg`).
+- The QR codes are generated at build time by `qrcode` (`src/lib/qr.ts`), with error correction H so the logo can sit in the middle. All 17 codes were scan-tested with jsQR.
+- **Never change `QR_TARGET`** (`https://www.ringopizzeria.com/carta`): printed codes can't be updated. If /carta ever moves, add a redirect instead.
+- The page needs no login, because it only shows public info. It's `noindex`, and robots.txt disallows `/panel`.
 
 ## Undo rules (panel)
 - After every save, the "Guardado" toast shows **Deshacer** for 8 seconds. Inicio lists the last 8 changes.
