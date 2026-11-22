@@ -3,28 +3,37 @@
 Last updated: 22 Nov 2026, by Hermy (TBH) for Mark Rasavong.
 
 ## Status
-- Branch **`v3`**: complete Astro rebuild of the site plus the owner panel. Built and tested locally:
-  - 20/20 panel end-to-end checks passed
-  - Lighthouse on mobile: Performance 95–97, Accessibility 100, SEO 100
+- Branch **`v3`**: complete Astro rebuild of the site plus the owner panel.
+  - 27/27 panel end-to-end checks pass locally (`e2e-panel.js` in the parent folder).
+  - Lighthouse on mobile: Performance 95–97, Accessibility 100, SEO 100.
+  - Live on Vercel Preview: https://novo-ringo-bar-git-v3-markrasavongs-projects.vercel.app (stable branch URL).
 - `main`: still the 2023 Next.js + Sanity site that runs ringopizzeria.com today. Nothing goes live until v3 is merged.
 - The Sanity data was imported once (`scripts/migrate-from-sanity.mjs`). Sanity is no longer used and can be shut down after launch.
 
 ## Go-live checklist
-1. Push `v3` to GitHub, and Vercel builds a Preview automatically.
-2. Vercel → Settings:
-   - Framework is Astro (`vercel.json` forces it).
-   - Node 24.
-   - Add the environment variables listed in README.md. Set `GITHUB_BRANCH=v3` for Preview and `main` for Production.
-3. In Resend, verify `ringopizzeria.com` (DNS records) so the login emails come from panel@ringopizzeria.com.
-4. Test the Preview:
-   - /, /carta, /en, /en/menu
-   - /panel: sign in, make one edit, undo it
-5. Merge `v3` → `main`, then check the production site.
+1. DONE: `v3` pushed; Vercel builds a Preview on every push.
+2. DONE (22 Nov 2026): Vercel env vars set for Production + Preview:
+   - `GITHUB_TOKEN`: fine-grained PAT "Panel Ringo (Vercel)", novo-ringo-bar only, Contents read/write, no expiry
+   - `GITHUB_REPO`
+   - `GITHUB_BRANCH`: `main` Production / `v3` Preview
+   - `PANEL_SECRET`
+   - `PANEL_EMAILS` = ringobaroe@gmail.com (Mattia), mark@thebrandinghouseusa.com
+   - `PANEL_MAIL_FROM`
+   - `RESEND_API_KEY`: sending-only, ringopizzeria.com only
+3. DONE: Resend domain ringopizzeria.com (region eu-west-1) is in Mark's Resend team "thebrandinghouseusa". Its DNS records were added at Spaceship: `resend._domainkey` TXT, `rsend` + `send` CNAME, `_dmarc` TXT. A login email to Mark was Delivered.
+4. DONE: Preview tested by Mark. A real sign-in worked, the edits committed to `v3`, and undo worked.
+5. TODO: Decide on the Vercel plan. Hobby is non-commercial only, so Pro is recommended. Then merge `v3` → `main` and check production.
 6. After launch:
    - Google Search Console: add the property and submit `sitemap-index.xml`.
    - Bing Webmaster Tools: import from Search Console. ChatGPT search relies on Bing.
    - Google Business Profile: website = https://www.ringopizzeria.com, menu link = https://www.ringopizzeria.com/carta, order links = Glovo / Uber Eats.
    - Vercel: turn on Web Analytics.
+   - Optional: delete the leftover branch-specific Preview (v3) copies of PANEL_SECRET / PANEL_MAIL_FROM in Vercel. They are harmless.
+
+## Undo rules (panel)
+- After every save, the "Guardado" toast shows **Deshacer** for 8 seconds. Inicio lists the last 8 changes.
+- Only the **newest change for each thing** can be undone. A "thing" is one dish, one closure, the hours, or the categories. The server enforces this (`changeKey` in `mutations.ts`), because undoing an older change would silently wipe out newer edits. An undo row offers **Rehacer**.
+- Local dev: `astro dev` reloads the page when `src/data/*.json` changes, which hides the toast. Production never reloads like this because it writes to GitHub.
 
 ## Not built yet (needs access first)
 - **Google Business Profile sync** for hours and closures. Needs Google's approval for Business Profile API access, plus Mattia adding TBH as a manager of his profile. Until then the panel labels Google as "Pendiente".
