@@ -1,0 +1,152 @@
+---
+import "../styles/base.css";
+import { getImage } from "astro:assets";
+import { site, hours, closures, type Lang } from "../lib/data";
+import { T, ROUTES } from "../lib/i18n";
+import Icons from "../components/Icons.astro";
+import logo from "../assets/site/logo.png";
+import ogDefault from "../assets/site/p4.jpg";
+
+interface Props {
+  lang: Lang;
+  title: string;
+  description: string;
+  path: string;          // canonical path of this page
+  altPath: string;       // same page in the other language
+  jsonld: string;
+  current?: "home" | "carta";
+  ogImage?: ImageMetadata;
+}
+const { lang, title, description, path, altPath, jsonld, current = "home", ogImage = ogDefault } = Astro.props;
+const t = T[lang];
+const other: Lang = lang === "es" ? "en" : "es";
+const canonical = new URL(path, site.url).href;
+const alt = new URL(altPath, site.url).href;
+const esUrl = lang === "es" ? canonical : alt;
+const enUrl = lang === "en" ? canonical : alt;
+const og = await getImage({ src: ogImage, width: 1200, height: 630, fit: "cover", format: "jpg" });
+const logoSmall = await getImage({ src: logo, width: 96, format: "png" });
+const R = ROUTES[lang];
+const runtime = { hours: hours.week, closures, t: { open: t.open, opens: t.opens, closedOpens: t.closedOpens, tomorrow: t.tomorrow, at: t.at, away: t.away, closedDay: t.closedDay, today: t.today, soldOut: t.soldOut }, lang };
+---
+<!doctype html>
+<html lang={lang}>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>{title}</title>
+  <meta name="description" content={description}>
+  <link rel="canonical" href={canonical}>
+  <link rel="alternate" hreflang="es" href={esUrl}>
+  <link rel="alternate" hreflang="en" href={enUrl}>
+  <link rel="alternate" hreflang="x-default" href={esUrl}>
+  <meta name="theme-color" content="#FBF7F0">
+  <meta name="format-detection" content="telephone=no">
+  <meta property="og:type" content="restaurant">
+  <meta property="og:site_name" content={site.name}>
+  <meta property="og:locale" content={t.locale}>
+  <meta property="og:title" content={title}>
+  <meta property="og:description" content={description}>
+  <meta property="og:url" content={canonical}>
+  <meta property="og:image" content={new URL(og.src, site.url).href}>
+  <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="geo.region" content="ES-VC"><meta name="geo.placename" content="València">
+  <meta name="geo.position" content={`${site.geo.lat};${site.geo.lng}`}><meta name="ICBM" content={`${site.geo.lat}, ${site.geo.lng}`}>
+  <link rel="icon" href="/favicon.ico" sizes="32x32">
+  <link rel="icon" href="/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="sitemap" href="/sitemap-index.xml">
+  <link rel="alternate" type="text/markdown" href="/carta.md" title="Carta (Markdown)">
+  <link rel="preload" href="/fonts/instrument-sans.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/fraunces.woff2" as="font" type="font/woff2" crossorigin>
+  <script type="application/ld+json" set:html={jsonld} />
+  <slot name="head" />
+</head>
+<body>
+  <a class="skip" href="#main">{t.skip}</a>
+  <Icons />
+  <div class="notice" role="status"><div class="wrap"><svg aria-hidden="true"><use href="#i-sun"/></svg><span data-notice></span></div></div>
+
+  <header class="top">
+    <div class="wrap">
+      <a class="brand" href={R.home} aria-label={`${site.shortName}, ${lang === "es" ? "inicio" : "home"}`}>
+        <img src={logoSmall.src} alt="" width="46" height="48">
+        <span><b>{site.shortName}</b><small>{lang === "es" ? "Pizzería · València" : "Pizzeria · Valencia"}</small></span>
+      </a>
+      <nav class="main" aria-label={lang === "es" ? "Principal" : "Main"}>
+        <a href={R.carta} aria-current={current === "carta" ? "page" : undefined}>{t.navCarta}</a>
+        <a href={`${R.home}#galeria`}>{t.navGallery}</a>
+        <a href={`${R.home}#visitanos`}>{t.navVisit}</a>
+      </nav>
+      <span class="status" data-status><span class="dot"></span><span data-status-text>{t.statusFallback}</span></span>
+      <a class="langlink" href={altPath} hreflang={other} lang={other} aria-label={t.langSwitch}>{t.langCode}</a>
+      <a class="btn btn-primary order-cta" href={site.glovo} target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-bag"/></svg>{t.order}</a>
+    </div>
+  </header>
+
+  <main id="main"><slot /></main>
+
+  <footer>
+    <div class="wrap">
+      <div class="footer-grid">
+        <address>© {site.name} · {site.address.street}, {site.address.postalCode} {site.address.city} · <a href={`tel:${site.phone}`}>{site.phoneDisplay}</a></address>
+        <div class="social">
+          <a href={R.carta}>{t.navCarta}</a>
+          <a href={site.instagram} rel="noopener">Instagram</a>
+          <a href={site.facebook} rel="noopener">Facebook</a>
+          <a href={altPath} hreflang={other}>{t.langSwitch}</a>
+        </div>
+      </div>
+      <p class="fine">{t.footerNote}. {lang === "es" ? "Web por" : "Website by"} The Branding House.</p>
+    </div>
+  </footer>
+
+  <nav class="actionbar" aria-label={lang === "es" ? "Acciones rápidas" : "Quick actions"}>
+    <a class="primary order-cta" href={site.glovo} target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-bag"/></svg>{t.orderShort}</a>
+    <a href={`tel:${site.phone}`}><svg aria-hidden="true"><use href="#i-phone"/></svg>{t.call}</a>
+    <a href={site.directions}><svg aria-hidden="true"><use href="#i-pin"/></svg>{t.directions}</a>
+  </nav>
+
+  <script is:inline define:vars={{ RB: runtime }}>
+  (function () {
+    var H = RB.hours, t = RB.t, lang = RB.lang;
+    var D = lang === "es" ? ["lunes","martes","miércoles","jueves","viernes","sábado","domingo"] : ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+    var now = new Date(new Date().toLocaleString("en-US", { timeZone: "Europe/Madrid" }));
+    var pad = function (n) { return String(n).padStart(2, "0"); };
+    var ymd = now.getFullYear() + "-" + pad(now.getMonth() + 1) + "-" + pad(now.getDate());
+    var dow = (now.getDay() + 6) % 7, mins = now.getHours() * 60 + now.getMinutes();
+    var toM = function (s) { return +s.slice(0, 2) * 60 + +s.slice(3); };
+    var fmtD = function (s) { var d = new Date(s + "T12:00:00"); return d.toLocaleDateString(lang === "es" ? "es-ES" : "en-GB", { weekday: "long", day: "numeric", month: "long" }); };
+    var away = null, soon = null;
+    RB.closures.forEach(function (c) {
+      if (c.from <= ymd && c.to >= ymd) away = c;
+      else if (c.from > ymd && (new Date(c.from) - new Date(ymd)) / 864e5 <= 10 && !soon) soon = c;
+    });
+    var shifts = H[dow] || [], txt = t.closedDay, cls = "";
+    if (away) { cls = "away"; txt = t.away; }
+    else {
+      var cur = shifts.find(function (s) { return mins >= toM(s[0]) && mins < toM(s[1]); });
+      var next = shifts.find(function (s) { return mins < toM(s[0]); });
+      if (cur) { cls = "open"; txt = t.open + cur[1]; }
+      else if (next) { txt = t.opens + next[0]; }
+      else { for (var k = 1; k <= 7; k++) { var n = (dow + k) % 7; if ((H[n] || []).length) { txt = t.closedOpens + (k === 1 ? t.tomorrow : D[n]) + t.at + H[n][0][0]; break; } } }
+    }
+    function paint() {
+      document.querySelectorAll("[data-status]").forEach(function (el) { el.className = "status " + cls; el.querySelector("[data-status-text]").textContent = txt; });
+      document.querySelectorAll("[data-today]").forEach(function (el) { el.textContent = away ? t.away : shifts.length ? shifts.map(function (s) { return s.join(" – "); }).join(" · ") : t.closedDay; });
+      document.querySelectorAll("[data-hours] tr").forEach(function (tr, i) { if (i === dow) { tr.classList.add("today"); tr.cells[0].insertAdjacentHTML("beforeend", ' <span class="today-tag">' + t.today + "</span>"); } });
+      var c = away || soon, n = document.querySelector(".notice");
+      if (c && n) { n.classList.add("show"); n.querySelector("[data-notice]").textContent = (lang === "es" ? c.msg_es : c.msg_en || c.msg_es); }
+      if (away) document.documentElement.classList.add("is-away");
+      document.querySelectorAll("[data-soldout]").forEach(function (el) {
+        if (el.getAttribute("data-soldout") === ymd) { el.classList.add("soldout"); var h = el.querySelector("h3"); h && h.insertAdjacentHTML("beforeend", '<span class="tag soldtag">' + t.soldOut + "</span>"); }
+      });
+    }
+    document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", paint) : paint();
+  })();
+  </script>
+  <slot name="end" />
+</body>
+</html>

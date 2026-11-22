@@ -1,0 +1,188 @@
+---
+import "../styles/carta.css";
+import { Image, getImage } from "astro:assets";
+import Base from "../layouts/Base.astro";
+import { site, menu, visibleCats, nameOf, descOf, catName, priceLabel, photoOf, openDaysPhrase, earliestOpen, lastUpdated, fmtDate, type Lang } from "../lib/data";
+import { T, ROUTES } from "../lib/i18n";
+import { restaurant, menuSchema, breadcrumbs, graph } from "../lib/seo";
+import hero from "../assets/site/p4.jpg";
+import logo from "../assets/site/logo.png";
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = T[lang];
+const R = ROUTES[lang];
+const es = lang === "es";
+const cats = visibleCats();
+const n = (id: string) => cats.find((c) => c.id === id)?.items.length ?? 0;
+const favs = cats.flatMap((c) => c.items).filter((i) => photoOf(i) && (i.cat === "pizzas" || i.cat === "calzones"))
+  .sort((a, b) => Number(b.tags.includes("casa")) - Number(a.tags.includes("casa"))).slice(0, 8);
+const updated = fmtDate(lastUpdated(), lang);
+const NOTES: Record<string, string> = es
+  ? { calzones: "Pizza cerrada, rellena y horneada.", extras: "Añádelos a cualquier pizza." }
+  : { calzones: "Folded, filled and baked pizza.", extras: "Add them to any pizza." };
+
+const title = es ? "Carta y precios · Pizzería Ringo Bar, Valencia (Campanar)" : "Menu & prices · Ringo Bar Pizzeria, Valencia (Campanar)";
+const description = es
+  ? `Carta completa de la Pizzería Ringo Bar en València: ${n("pizzas")} pizzas, ${n("calzones")} calzones, entrantes, paninis, postres y bebidas, con precios. Margherita, Burrata, Trufada y la pizza Ringo.`
+  : `Full menu of Ringo Bar Pizzeria in Valencia: ${n("pizzas")} pizzas, ${n("calzones")} calzones, starters, panini, desserts and drinks, with prices.`;
+const heroImg = await getImage({ src: hero, width: 1200, format: "jpg" });
+const logoImg = await getImage({ src: logo, width: 400, format: "png" });
+const jsonld = graph(
+  restaurant(lang, new URL(heroImg.src, site.url).href, new URL(logoImg.src, site.url).href),
+  menuSchema(lang),
+  breadcrumbs([[es ? "Inicio" : "Home", R.home], [t.navCarta, R.carta]]),
+);
+const big = new Map<string, string>();
+for (const i of cats.flatMap((c) => c.items)) {
+  const p = photoOf(i);
+  if (p) big.set(i.id, (await getImage({ src: p, width: 1100, height: 825, fit: "cover", format: "webp" })).src);
+}
+---
+<Base lang={lang} title={title} description={description} path={R.carta} altPath={ROUTES[es ? "en" : "es"].carta} jsonld={jsonld} current="carta">
+  <section class="c-hero">
+    <div class="wrap">
+      <nav class="crumbs" aria-label={es ? "Migas de pan" : "Breadcrumb"}><a href={R.home}>{es ? "Inicio" : "Home"}</a> / <span aria-current="page">{t.navCarta}</span></nav>
+      <h1>{es ? <Fragment>La <em>carta</em></Fragment> : <Fragment>Our <em>menu</em></Fragment>}</h1>
+      <p class="lede">{es
+        ? `Pizza italiana en Campanar, València: ${n("pizzas")} pizzas, ${n("calzones")} calzones, entrantes, paninis y postres. Precios en el local, IVA incluido. Abrimos ${openDaysPhrase("es")} desde las ${earliestOpen()}.`
+        : `Italian pizza in Campanar, Valencia: ${n("pizzas")} pizzas, ${n("calzones")} calzones, starters, panini and desserts. In-restaurant prices, VAT included. Open ${openDaysPhrase("en")} from ${earliestOpen()}.`}</p>
+      <ul class="meta">
+        <li><span class="status" data-status><span class="dot"></span><span data-status-text>{t.statusFallback}</span></span></li>
+        <li>{t.today}&nbsp;<span data-today>–</span></li>
+        <li><time datetime={lastUpdated().toISOString()}>{es ? "Actualizada el " : "Updated "}{updated}</time></li>
+      </ul>
+    </div>
+  </section>
+
+  {favs.length > 0 && (
+  <section class="favs" aria-labelledby="favs-h">
+    <div class="wrap">
+      <h2 id="favs-h">{es ? "Favoritas de la casa" : "House favourites"}</h2>
+      <div class="fav-row">
+        {favs.map((i) => (
+          <button class="fav" type="button" data-view={i.id}>
+            <Image src={photoOf(i)!} alt={nameOf(i, lang)} width={520} height={390} fit="cover" widths={[300, 520]} sizes="(max-width: 640px) 72vw, 280px" />
+            <b>{nameOf(i, lang)}<span>{priceLabel(i)}</span></b>
+          </button>
+        ))}
+      </div>
+    </div>
+  </section>)}
+
+  <div class="tools">
+    <div class="wrap">
+      <label class="search" id="search-box">
+        <span class="sr-only">{es ? "Buscar en la carta" : "Search the menu"}</span>
+        <svg aria-hidden="true"><use href="#i-search"/></svg>
+        <input id="q" type="search" inputmode="search" autocomplete="off" placeholder={es ? "Busca una pizza o ingrediente" : "Search a pizza or ingredient"}>
+        <button class="clear" type="button" aria-label={es ? "Borrar búsqueda" : "Clear search"}><svg aria-hidden="true"><use href="#i-x"/></svg></button>
+      </label>
+      <nav class="chips" id="chips" aria-label={es ? "Categorías" : "Categories"}>
+        {cats.map((c) => <a href={`#${c.id}`} data-cat={c.id}>{catName(c, lang)}<span>{c.items.length}</span></a>)}
+      </nav>
+    </div>
+  </div>
+
+  <div class="wrap layout" id="menu">
+    <aside class="side" aria-label={es ? "Categorías" : "Categories"}>
+      <nav>{cats.map((c) => <a href={`#${c.id}`} data-cat={c.id}>{catName(c, lang)}<span>{c.items.length}</span></a>)}</nav>
+      <div class="side-cta">{es ? "¿Lo quieres en casa?" : "Want it at home?"}
+        <a class="btn btn-primary order-cta" href={site.glovo} target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-bag"/></svg>{t.orderShort}</a></div>
+    </aside>
+    <div>
+      {cats.map((c) => (
+        <section class="cat" id={c.id} aria-labelledby={`h-${c.id}`}>
+          <div class="cat-head"><h2 id={`h-${c.id}`}>{catName(c, lang)}</h2><small>{c.items.length} {es ? "platos" : "items"}</small></div>
+          {NOTES[c.id] && <p class="cat-note">{NOTES[c.id]}</p>}
+          <div class="dishes">
+            {c.items.map((i) => {
+              const p = photoOf(i);
+              return (
+                <article class={`dish ${p ? "has-photo" : ""}`} id={`p-${i.id}`} data-soldout={i.soldOutOn ?? undefined}>
+                  {p && <button class="thumb" type="button" data-view={i.id} aria-label={`${nameOf(i, lang)}: ${es ? "ver foto" : "view photo"}`}><Image src={p} alt="" width={160} height={160} fit="cover" /></button>}
+                  <div>
+                    <h3>{nameOf(i, lang)}{i.tags.filter((g) => g !== "sincarne" || c.id === "pizzas" || c.id === "calzones").map((g) => <span class={`tag ${g}`}>{t.tags[g] ?? g}</span>)}</h3>
+                    {descOf(i, lang) && <p>{descOf(i, lang)}</p>}
+                    {i.sizes?.length ? <p class="sizes">{i.sizes.map((s) => `${es ? s.es : s.en || s.es} ${s.price.toLocaleString("es-ES", { minimumFractionDigits: 2 })} €`).join(" · ")}</p> : null}
+                  </div>
+                  <span class="price">{priceLabel(i)}</span>
+                </article>
+              );
+            })}
+          </div>
+        </section>
+      ))}
+      <p class="empty" id="empty">{es ? "No hay nada con ese nombre. Prueba con otro ingrediente." : "Nothing matches that. Try another ingredient."}</p>
+      <p class="legal">{es
+        ? "Precios en el local, IVA incluido. En Glovo y Uber Eats los precios pueden ser distintos. ¿Alergias o intolerancias? Pregunta al personal: te informamos de los alérgenos de cada plato."
+        : "In-restaurant prices, VAT included. Prices on Glovo and Uber Eats may differ. Allergies or intolerances? Ask our staff about the allergens in each dish."}</p>
+    </div>
+  </div>
+
+  <section class="order" aria-labelledby="order-h">
+    <div class="wrap">
+      <div>
+        <h2 id="order-h">{es ? <Fragment>¿Pizza en casa <em>esta noche?</em></Fragment> : <Fragment>Pizza at home <em>tonight?</em></Fragment>}</h2>
+        <p>{es ? "Pídela por Glovo o Uber Eats. Para recoger en el local, llámanos." : "Order on Glovo or Uber Eats. For pick-up, give us a call."}</p>
+      </div>
+      <div class="order-ctas">
+        <a class="btn btn-white order-cta" href={site.glovo} target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-bag"/></svg>{t.glovo}</a>
+        <a class="btn btn-light order-cta" href={site.ubereats} target="_blank" rel="noopener">{t.uber} <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        <a class="btn btn-light" href={`tel:${site.phone}`}><svg aria-hidden="true"><use href="#i-phone"/></svg>{t.pickup}{site.phoneDisplay}</a>
+      </div>
+    </div>
+  </section>
+
+  <dialog class="viewer" id="viewer" aria-labelledby="v-name">
+    <button class="x" type="button" aria-label={es ? "Cerrar" : "Close"}><svg aria-hidden="true"><use href="#i-x"/></svg></button>
+    <img id="v-img" alt="" width="1100" height="825">
+    <div class="cap"><h3 id="v-name"></h3><span class="price" id="v-price"></span><p id="v-desc"></p></div>
+  </dialog>
+
+  <script is:inline slot="end" define:vars={{ BIG: Object.fromEntries(big) }}>
+  (function () {
+    var $ = function (s, el) { return (el || document).querySelector(s); }, $$ = function (s, el) { return Array.prototype.slice.call((el || document).querySelectorAll(s)); };
+    var fold = function (s) { return s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); };
+    var dishes = $$(".dish"), cats = $$(".cat"), q = $("#q"), box = $("#search-box");
+    dishes.forEach(function (d) { d._t = fold(d.textContent); });
+    function filter() {
+      var v = fold(q.value.trim()), total = 0;
+      box.classList.toggle("has", !!q.value);
+      cats.forEach(function (c) {
+        var k = 0;
+        $$(".dish", c).forEach(function (d) { var ok = !v || d._t.indexOf(v) > -1; d.hidden = !ok; if (ok) k++; });
+        c.hidden = !k; total += k;
+      });
+      $("#empty").classList.toggle("show", !total);
+    }
+    q.addEventListener("input", filter);
+    $(".clear").addEventListener("click", function (e) { e.preventDefault(); q.value = ""; filter(); q.focus(); });
+
+    var chips = $("#chips");
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        $$("[data-cat]").forEach(function (a) { a.classList.toggle("on", a.getAttribute("data-cat") === e.target.id); });
+        var chip = $('#chips [data-cat="' + e.target.id + '"]');
+        if (chip && chips.scrollWidth > chips.clientWidth) chips.scrollTo({ left: chip.offsetLeft - 20, behavior: "smooth" });
+      });
+    }, { rootMargin: "-45% 0px -50% 0px" });
+    cats.forEach(function (c) { io.observe(c); });
+    var first = cats[0] && cats[0].id; first && $$('[data-cat="' + first + '"]').forEach(function (a) { a.classList.add("on"); });
+
+    var dlg = $("#viewer");
+    document.addEventListener("click", function (e) {
+      var b = e.target.closest("[data-view]"); if (!b) return;
+      var id = b.getAttribute("data-view"), art = document.getElementById("p-" + id);
+      $("#v-img").src = BIG[id]; $("#v-img").alt = $("h3", art).childNodes[0].textContent;
+      $("#v-name").textContent = $("h3", art).childNodes[0].textContent;
+      $("#v-price").textContent = $(".price", art).textContent;
+      var p = $("p", art); $("#v-desc").textContent = p ? p.textContent : "";
+      dlg.showModal();
+    });
+    $(".x", dlg).addEventListener("click", function () { dlg.close(); });
+    dlg.addEventListener("click", function (e) { if (e.target === dlg) dlg.close(); });
+  })();
+  </script>
+</Base>

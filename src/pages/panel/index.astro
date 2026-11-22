@@ -1,0 +1,493 @@
+---
+import "../../styles/base.css";
+import "../../styles/panel.css";
+import { getImage } from "astro:assets";
+import logo from "../../assets/site/logo.png";
+import site from "../../data/site.json";
+const lg = await getImage({ src: logo, width: 192, format: "png" });
+---
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Panel Ringo</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#1C1714">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Panel Ringo">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18H6z"/><path d="M9 8h6M9 12h6M9 16h4"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+  <symbol id="i-back" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></symbol>
+  <symbol id="i-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+  <symbol id="i-cam" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></symbol>
+  <symbol id="i-img" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 9"/></symbol>
+  <symbol id="i-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15l6-6 6 6"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></symbol>
+</svg>
+
+<div class="app" id="app">
+  <header class="bar" id="bar"></header>
+
+  <section class="screen login" id="s-login">
+    <img class="logo" src={lg.src} alt="Ringo Bar" width="88" height="92">
+    <h2>Panel Ringo</h2>
+    <p>Cambia la carta, el horario y los cierres desde el móvil.</p>
+    <form id="login-form">
+      <p class="err" id="login-err" hidden></p>
+      <label class="field"><span>Tu email</span><input class="inp" id="login-email" type="email" autocomplete="email" inputmode="email" required></label>
+      <button class="btn btn-primary" style="width:100%;min-height:56px" type="submit">Enviarme el enlace para entrar</button>
+      <p class="help" style="text-align:center;margin-top:14px">Sin contraseñas: te llega un email con un botón para entrar.</p>
+    </form>
+    <div id="login-sent" class="sent" hidden>
+      <div class="big">📬</div>
+      <p>Te hemos enviado un email. Ábrelo <b>en este móvil</b> y pulsa «Entrar al panel».</p>
+      <p class="help">¿No llega? Mira en «Spam» o <button class="link-btn" type="button" id="login-again">vuelve a pedirlo</button>.</p>
+    </div>
+  </section>
+
+  <section class="screen" id="s-inicio"></section>
+  <section class="screen" id="s-carta"></section>
+  <section class="screen" id="s-plato"></section>
+  <section class="screen" id="s-categorias"></section>
+  <section class="screen" id="s-horario"></section>
+  <section class="screen" id="s-cierres"></section>
+
+  <nav class="tabs" aria-label="Secciones">
+    <a href="#inicio" data-tab="inicio"><svg><use href="#i-home"/></svg>Inicio</a>
+    <a href="#carta" data-tab="carta"><svg><use href="#i-menu"/></svg>Carta</a>
+    <a href="#horario" data-tab="horario"><svg><use href="#i-clock"/></svg>Horario</a>
+    <a href="#cierres" data-tab="cierres"><svg><use href="#i-sun"/></svg>Cierres</a>
+  </nav>
+  <div class="toast" id="toast" role="status"><svg><use href="#i-check"/></svg><span></span></div>
+  <canvas class="story-c" id="story-c" width="1080" height="1920"></canvas>
+</div>
+
+<script is:inline define:vars={{ LOGO: lg.src, SITE: site }}>
+(() => {
+  "use strict";
+  const $ = (s, el = document) => el.querySelector(s), $$ = (s, el = document) => [...el.querySelectorAll(s)];
+  const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const num = (n) => (n == null ? "" : Number(n).toLocaleString("es-ES", { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+  const priceOf = (i) => i.sizes?.length ? `${num(Math.min(...i.sizes.map((s) => s.price)))} – ${num(Math.max(...i.sizes.map((s) => s.price)))} €` : i.priceMax ? `${num(i.price)} – ${num(i.priceMax)} €` : `${num(i.price)} €`;
+  const today = () => new Date().toLocaleDateString("sv-SE", { timeZone: "Europe/Madrid" });
+  const DAYS = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
+  const TAGS = [["casa", "De la casa"], ["top", "Favorita"], ["picante", "Picante"], ["nuevo", "Nuevo"], ["sincarne", "Sin carne"]];
+  const LIVE = "Guardado · se verá en la web en 1–2 minutos";
+  let S = null, catFilter = "all", draft = null, busy = false;
+
+  // ---------- API ----------
+  async function api(action, body) {
+    const r = await fetch(`/api/panel/${action}`, body === undefined ? { credentials: "same-origin" } : {
+      method: "POST", credentials: "same-origin", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body),
+    });
+    const j = await r.json().catch(() => ({ error: "Error de conexión" }));
+    if (r.status === 401) { S = null; location.hash = "#login"; throw new Error("Tu sesión ha caducado. Vuelve a entrar."); }
+    if (!r.ok) throw new Error(j.error || "Algo ha fallado");
+    return j;
+  }
+  async function act(action, body, msg = LIVE, then) {
+    if (busy) return; busy = true; document.body.classList.add("busy");
+    try { const j = await api(action, body); Object.assign(S, j); toast(msg); then && then(j); }
+    catch (e) { toast(e.message, true); }
+    finally { busy = false; document.body.classList.remove("busy"); }
+  }
+
+  // ---------- chrome ----------
+  const TITLES = { login: "", inicio: "Panel Ringo", carta: "La carta", plato: "Editar plato", nuevo: "Nuevo plato", categorias: "Categorías", horario: "Horario", cierres: "Vacaciones y cierres" };
+  const BACK = { plato: "#carta", nuevo: "#carta", categorias: "#carta" };
+  function drawBar(r) {
+    const b = $("#bar");
+    b.style.display = r === "login" ? "none" : "";
+    b.innerHTML = (BACK[r] ? `<a class="icon-btn" href="${BACK[r]}" aria-label="Volver"><svg><use href="#i-back"/></svg></a>` : `<img src="${LOGO}" alt="">`) +
+      `<h1>${TITLES[r] || ""}</h1>` +
+      (r === "carta" ? `<a class="txt-btn" href="#categorias">Categorías</a>` : r === "inicio" ? `<button class="txt-btn" id="logout" type="button">Salir</button>` : "");
+    const lo = $("#logout"); lo && lo.addEventListener("click", async () => { await api("logout", {}); S = null; location.hash = "#login"; });
+  }
+  let tt;
+  function toast(m, bad) {
+    const t = $("#toast"); t.querySelector("span").textContent = m; t.style.background = bad ? "#A9170F" : "";
+    t.classList.add("show"); clearTimeout(tt); tt = setTimeout(() => t.classList.remove("show"), bad ? 5000 : 3200);
+  }
+
+  // ---------- status ----------
+  function statusNow() {
+    const d = today(), dow = (new Date(d + "T12:00:00").getDay() + 6) % 7;
+    const c = S.closures.find((x) => x.from <= d && x.to >= d);
+    if (c) return { dot: "var(--tomato)", txt: `Hoy está cerrado por ${c.reason === "vacaciones" ? "vacaciones" : "cierre"} (hasta el ${fmtDay(c.to)})` };
+    const sh = S.hours.week[dow];
+    return sh.length ? { dot: "var(--basil)", txt: `Hoy abres ${sh.map((s) => `de ${s[0]} a ${s[1]}`).join(" y ")}` } : { dot: "#B9AFA4", txt: "Hoy es tu día de descanso" };
+  }
+  const fmtDay = (iso, opts = { day: "numeric", month: "long" }) => new Date(iso + "T12:00:00").toLocaleDateString("es-ES", opts);
+  const ago = (iso) => { const d = new Date(iso); const s = (Date.now() - d) / 1000;
+    if (s < 60) return "Ahora mismo"; if (s < 3600) return `Hace ${Math.floor(s / 60)} min`;
+    return d.toLocaleString("es-ES", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit", timeZone: "Europe/Madrid" }); };
+
+  // ---------- screens ----------
+  function drawInicio() {
+    const st = statusNow();
+    const soldOut = S.menu.items.filter((i) => i.soldOutOn === today());
+    const name = (S.user || "").split("@")[0];
+    $("#s-inicio").innerHTML = `
+      <p class="hello">Buenas${name ? ", " + esc(name[0].toUpperCase() + name.slice(1)) : ""}</p>
+      <p class="sub">${esc(fmtDay(today(), { weekday: "long", day: "numeric", month: "long" }).replace(/^./, (c) => c.toUpperCase()))}</p>
+      <div class="card today-card"><span class="dot" style="background:${st.dot}"></span>
+        <div style="flex:1"><div class="big">${esc(st.txt)}</div><small style="color:var(--ink-3)">Así lo ven tus clientes en la web</small></div></div>
+      ${soldOut.length ? `<p class="empty-note" style="margin-top:12px">Agotado hoy: <b>${soldOut.map((i) => esc(i.name)).join(", ")}</b>. Mañana vuelven solos a la carta.</p>` : ""}
+      <h2 class="sec">¿Qué quieres cambiar?</h2>
+      <div class="tiles">
+        <a class="tile red" href="#carta"><span class="ic"><svg><use href="#i-menu"/></svg></span><b>La carta</b><small>Platos, precios, ingredientes</small></a>
+        <a class="tile" href="#horario"><span class="ic"><svg><use href="#i-clock"/></svg></span><b>Horario</b><small>Días y horas</small></a>
+        <a class="tile" href="#cierres"><span class="ic"><svg><use href="#i-sun"/></svg></span><b>Vacaciones y cierres</b><small>Avisa a tus clientes</small></a>
+        <a class="tile" href="#categorias"><span class="ic"><svg><use href="#i-img"/></svg></span><b>Categorías</b><small>Pizzas, entrantes…</small></a>
+      </div>
+      <h2 class="sec">Últimos cambios</h2>
+      ${S.changes.length ? `<ul class="log">${S.changes.slice(0, 8).map((c) => `<li><span>${esc(c.summary)}<small>${esc(ago(c.at))}</small></span><button class="undo" type="button" data-undo="${esc(c.id)}">Deshacer</button></li>`).join("")}</ul>` : `<p class="empty-note">Todavía no hay cambios.</p>`}
+      <p style="margin:22px 4px 0"><a class="txt-btn" style="padding:0" href="/carta" target="_blank" rel="noopener">Ver mi carta en la web ↗</a></p>
+      ${S.storage === "local" ? `<p class="empty-note">Modo prueba: los cambios se guardan en este ordenador, no en GitHub.</p>` : ""}`;
+  }
+
+  function drawCarta() {
+    const q = ($("#pq")?.value || "").toLowerCase();
+    const el = $("#s-carta");
+    if (!$("#pq")) el.innerHTML = `
+      <label class="search"><svg><use href="#i-search"/></svg><input id="pq" type="search" placeholder="Buscar un plato" aria-label="Buscar un plato"></label>
+      <div class="chips" id="pchips"></div><div id="plist"></div>
+      <a class="fab" href="#nuevo"><svg><use href="#i-plus"/></svg>Añadir plato</a>`;
+    $("#pq").oninput = drawCarta;
+    $("#pchips").innerHTML = [`<button type="button" data-c="all" class="${catFilter === "all" ? "on" : ""}">Todo</button>`]
+      .concat(S.menu.categories.map((c) => `<button type="button" data-c="${esc(c.id)}" class="${catFilter === c.id ? "on" : ""}">${esc(c.es)}</button>`)).join("");
+    $("#plist").innerHTML = S.menu.categories.filter((c) => catFilter === "all" || catFilter === c.id).map((c) => {
+      const list = S.menu.items.filter((i) => i.cat === c.id && (!q || (i.name + " " + i.desc).toLowerCase().includes(q)));
+      if (!list.length) return q ? "" : `<div class="cat-title">${esc(c.es)}<small>0 platos</small></div><p class="empty-note">Sin platos todavía.</p>`;
+      return `<div class="cat-title">${esc(c.es)}${c.visible ? "" : ' <span class="pill muted">Oculta</span>'}<small>${list.length} platos</small></div><ul class="rows">` + list.map((i) => {
+        const pill = i.status === "off" ? `<span class="pill muted">Oculto</span>` : i.soldOutOn === today() ? `<span class="pill warn">Agotado hoy</span>` : "";
+        return `<li><a class="row ${pill ? "off" : ""}" href="#plato/${encodeURIComponent(i.id)}"><span class="ph" data-photo="${esc(i.photo || "")}">${i.photo ? "" : '<svg><use href="#i-img"/></svg>'}</span>
+          <span class="t"><b>${esc(i.name)}</b><small>${esc(i.desc || "Sin ingredientes")}</small></span>${pill}<span class="pr">${esc(priceOf(i))}</span><svg class="chev"><use href="#i-chev"/></svg></a></li>`;
+      }).join("") + "</ul>";
+    }).join("");
+    loadThumbs();
+  }
+  // Thumbnails: photos live in the repo; the public site serves optimised copies. Use the live carta's images when available.
+  let thumbMap = null;
+  async function loadThumbs() {
+    if (!thumbMap) {
+      thumbMap = {};
+      try {
+        const html = await (await fetch("/carta", { cache: "no-store" })).text();
+        const doc = new DOMParser().parseFromString(html, "text/html");
+        $$(".dish", doc).forEach((d) => { const img = $(".thumb img", d); if (img) thumbMap[d.id.replace(/^p-/, "")] = img.getAttribute("src"); });
+      } catch (e) { /* thumbnails are optional */ }
+    }
+    $$("#plist .row").forEach((a) => {
+      const id = decodeURIComponent(a.getAttribute("href").split("/")[1]); const ph = $(".ph", a);
+      if (thumbMap[id]) { ph.style.backgroundImage = `url('${thumbMap[id]}')`; ph.innerHTML = ""; }
+    });
+  }
+  document.addEventListener("click", (e) => {
+    const c = e.target.closest("#pchips [data-c]"); if (c) { catFilter = c.dataset.c; drawCarta(); }
+    const u = e.target.closest("[data-undo]");
+    if (u && confirm("¿Deshacer este cambio?")) act("undo", { id: u.dataset.undo }, "Deshecho · se verá en la web en 1–2 minutos", () => drawInicio());
+  });
+
+  // ----- item editor -----
+  function drawPlato(id) {
+    const it = id ? S.menu.items.find((i) => i.id === id) : null;
+    if (id && !it) { location.hash = "#carta"; return; }
+    draft = it ? JSON.parse(JSON.stringify(it)) : { name: "", name_en: "", desc: "", desc_en: "", price: "", cat: catFilter !== "all" ? catFilter : S.menu.categories[0].id, tags: [], status: "on", soldOutOn: null, photo: null };
+    draft.mode = draft.sizes?.length ? "sizes" : draft.priceMax ? "range" : "one";
+    draft.avail = draft.status === "off" ? "off" : draft.soldOutOn === today() ? "sold" : "on";
+    draft.newPhoto = null;
+    const el = $("#s-plato");
+    el.innerHTML = `
+      <p class="err" id="p-err" hidden></p>
+      <div class="photo-edit">
+        <div class="ph" id="e-ph">${thumbMap?.[draft.id] ? "" : '<svg><use href="#i-img"/></svg>'}</div>
+        <div class="btns">
+          <label class="sbtn"><svg><use href="#i-cam"/></svg>Hacer foto<input type="file" accept="image/*" capture="environment" hidden data-photo-in></label>
+          <label class="sbtn"><svg><use href="#i-img"/></svg>Elegir de la galería<input type="file" accept="image/*" hidden data-photo-in></label>
+        </div>
+      </div>
+      <label class="field"><span>Nombre</span><input class="inp" id="e-name" maxlength="80" value="${esc(draft.name)}" autocomplete="off"></label>
+      <label class="field"><span>Categoría</span><select class="inp" id="e-cat">${S.menu.categories.map((c) => `<option value="${esc(c.id)}" ${c.id === draft.cat ? "selected" : ""}>${esc(c.es)}</option>`).join("")}</select></label>
+      <div class="field"><span>Precio</span>
+        <div class="seg" id="e-mode"><button type="button" data-v="one">Un precio</button><button type="button" data-v="range">Desde – hasta</button><button type="button" data-v="sizes">Tamaños</button></div>
+        <div id="e-price-box" style="margin-top:10px"></div>
+      </div>
+      <label class="field"><span>Ingredientes <em>(lo que lleva)</em></span><textarea class="inp" id="e-desc" maxlength="400">${esc(draft.desc)}</textarea></label>
+      <div class="field"><span>¿Está disponible?</span>
+        <div class="seg" id="e-avail"><button type="button" data-v="on">En la carta</button><button type="button" data-v="sold">Agotado hoy</button><button type="button" data-v="off">Oculto</button></div>
+        <p class="help" id="e-avail-help"></p></div>
+      <div class="field"><span>Etiquetas <em>(opcional)</em></span>
+        <div class="tagpick" id="e-tags">${TAGS.map(([k, l]) => `<button type="button" data-t="${k}" class="${draft.tags.includes(k) ? "on" : ""}">${l}</button>`).join("")}</div></div>
+      <details class="en" ${draft.name_en && draft.name_en !== draft.name ? "" : ""}><summary>Versión en inglés <small>opcional</small></summary>
+        <div class="in">
+          <label class="field"><span>Name</span><input class="inp" id="e-name-en" maxlength="80" value="${esc(draft.name_en)}"></label>
+          <label class="field"><span>Ingredients</span><textarea class="inp" id="e-desc-en" maxlength="400">${esc(draft.desc_en)}</textarea></label>
+          <p class="help">Si lo dejas vacío, la carta en inglés muestra el texto en español.</p>
+        </div></details>
+      <div class="preview"><div class="l">Así se verá en la carta</div><div class="d"><h3 id="pv-name"></h3><span class="pr" id="pv-price"></span><p id="pv-desc"></p></div></div>
+      <div class="savebar"><button class="btn btn-primary" type="button" id="save">${it ? "Guardar cambios" : "Añadir a la carta"}</button></div>
+      ${it ? `<button class="danger" type="button" id="del">Eliminar este plato</button>` : ""}`;
+    if (thumbMap?.[draft.id]) $("#e-ph").style.backgroundImage = `url('${thumbMap[draft.id]}')`;
+    drawPriceBox(); setSeg("#e-mode", draft.mode); setAvail(draft.avail); preview();
+    $("#e-mode").onclick = (e) => { const b = e.target.closest("button"); if (!b) return; readPrice(); draft.mode = b.dataset.v; setSeg("#e-mode", draft.mode); drawPriceBox(); preview(); };
+    $("#e-avail").onclick = (e) => { const b = e.target.closest("button"); b && setAvail(b.dataset.v); };
+    $("#e-tags").onclick = (e) => { const b = e.target.closest("button"); b && b.classList.toggle("on"); };
+    el.oninput = preview;
+    $$("[data-photo-in]").forEach((inp) => inp.addEventListener("change", () => pickPhoto(inp.files[0])));
+    $("#save").onclick = savePlato;
+    const del = $("#del"); del && (del.onclick = () => confirm(`¿Eliminar «${draft.name}» de la carta? Podrás recuperarlo con «Deshacer» en Inicio.`) &&
+      act("delete", { id: draft.id }, "Eliminado · podrás deshacerlo desde Inicio", () => (location.hash = "#carta")));
+  }
+  const setSeg = (sel, v) => $$(sel + " button").forEach((b) => b.classList.toggle("on", b.dataset.v === v));
+  const AV = { on: "Se ve en la carta con su precio.", sold: "Sale como «Agotado hoy». Mañana vuelve solo a la carta.", off: "No aparece en la carta hasta que lo vuelvas a poner." };
+  function setAvail(v) { draft.avail = v; setSeg("#e-avail", v); $$("#e-avail button").forEach((b) => b.classList.toggle("sold", v === "sold" && b.dataset.v === "sold")); $("#e-avail-help").textContent = AV[v]; }
+  function drawPriceBox() {
+    const box = $("#e-price-box");
+    if (draft.mode === "sizes") {
+      if (!draft.sizes?.length) draft.sizes = [{ es: "", en: "", price: draft.price || "" }];
+      box.innerHTML = `<div class="sizes-ed">${draft.sizes.map((s, k) => `<div class="row2"><input class="inp" placeholder="Tamaño (p. ej. Grande)" value="${esc(s.es)}" data-sz="${k}" data-f="es"><input class="inp" inputmode="decimal" placeholder="0,00" value="${esc(s.price === "" ? "" : num(s.price))}" data-sz="${k}" data-f="price"><button class="x-btn" type="button" data-rm="${k}" aria-label="Quitar">×</button></div>`).join("")}
+        <button class="link-btn" type="button" id="add-size">+ Añadir tamaño</button></div>`;
+      $("#add-size").onclick = () => { readPrice(); draft.sizes.push({ es: "", en: "", price: "" }); drawPriceBox(); };
+      $$("[data-rm]", box).forEach((b) => (b.onclick = () => { readPrice(); draft.sizes.splice(+b.dataset.rm, 1); if (!draft.sizes.length) draft.mode = "one", setSeg("#e-mode", "one"); drawPriceBox(); preview(); }));
+    } else {
+      box.innerHTML = `<div style="display:grid;grid-template-columns:${draft.mode === "range" ? "1fr 1fr" : "1fr"};gap:10px">
+        <span class="money"><input class="inp" id="e-price" inputmode="decimal" placeholder="0,00" value="${esc(draft.price === "" || draft.price == null ? "" : num(draft.price))}" aria-label="Precio"></span>
+        ${draft.mode === "range" ? `<span class="money"><input class="inp" id="e-pmax" inputmode="decimal" placeholder="hasta" value="${esc(draft.priceMax ? num(draft.priceMax) : "")}" aria-label="Precio hasta"></span>` : ""}</div>`;
+    }
+  }
+  const pnum = (v) => (v === "" || v == null ? "" : Number(String(v).replace(/\./g, "").replace(",", ".")));
+  function readPrice() {
+    if (draft.mode === "sizes") $$("[data-sz]").forEach((i) => { const s = draft.sizes[+i.dataset.sz]; if (!s) return; if (i.dataset.f === "price") s.price = pnum(i.value); else { s.es = i.value; s.en = s.en || ""; } });
+    else { draft.price = pnum($("#e-price")?.value); draft.priceMax = draft.mode === "range" ? pnum($("#e-pmax")?.value) : ""; }
+  }
+  function preview() {
+    readPrice();
+    $("#pv-name").textContent = $("#e-name").value || "Nombre del plato";
+    const p = draft.mode === "sizes" ? draft.sizes.filter((s) => s.price !== "").map((s) => s.price) : [draft.price, draft.priceMax].filter((x) => x !== "" && x != null && !isNaN(x));
+    $("#pv-price").textContent = p.length ? (p.length > 1 && Math.min(...p) !== Math.max(...p) ? `${num(Math.min(...p))} – ${num(Math.max(...p))} €` : `${num(p[0])} €`) : "0,00 €";
+    $("#pv-desc").textContent = $("#e-desc").value;
+  }
+  async function pickPhoto(file) {
+    if (!file) return;
+    try {
+      const bmp = await createImageBitmap(file, { imageOrientation: "from-image" });
+      const k = Math.min(1, 1600 / Math.max(bmp.width, bmp.height));
+      const c = document.createElement("canvas"); c.width = Math.round(bmp.width * k); c.height = Math.round(bmp.height * k);
+      c.getContext("2d").drawImage(bmp, 0, 0, c.width, c.height);
+      draft.newPhoto = c.toDataURL("image/jpeg", 0.84);
+      const ph = $("#e-ph"); ph.style.backgroundImage = `url('${draft.newPhoto}')`; ph.innerHTML = "";
+    } catch (e) { toast("No se pudo leer la foto. Prueba con otra.", true); }
+  }
+  async function savePlato() {
+    readPrice();
+    const body = {
+      id: draft.id, name: $("#e-name").value, cat: $("#e-cat").value, desc: $("#e-desc").value,
+      name_en: $("#e-name-en").value === draft.name && $("#e-name").value !== draft.name ? "" : $("#e-name-en").value, desc_en: $("#e-desc-en").value,
+      tags: $$("#e-tags button.on").map((b) => b.dataset.t), status: draft.avail === "off" ? "off" : "on", soldOut: draft.avail === "sold",
+      price: draft.mode === "sizes" ? null : draft.price, priceMax: draft.mode === "range" ? draft.priceMax : null,
+      sizes: draft.mode === "sizes" ? draft.sizes.filter((s) => s.es || s.price !== "") : undefined,
+    };
+    const err = $("#p-err");
+    if (!body.name.trim()) { err.textContent = "Ponle un nombre al plato."; err.hidden = false; window.scrollTo(0, 0); return; }
+    if (body.price === "" || (body.price != null && isNaN(body.price))) { err.textContent = "Escribe el precio (por ejemplo 10,50)."; err.hidden = false; window.scrollTo(0, 0); return; }
+    err.hidden = true;
+    const photo = draft.newPhoto;
+    if (busy) return; busy = true; document.body.classList.add("busy");
+    try {
+      let saved = null, j;
+      if (photo && draft.id) { j = await api("photo", { id: draft.id, dataUrl: photo }); Object.assign(S, j); }
+      try { j = await api("item", body); Object.assign(S, j); }
+      catch (e) { if (!(photo && draft.id && /No has cambiado/.test(e.message))) throw e; }
+      if (photo && !draft.id) {
+        saved = S.menu.items.find((i) => i.name === body.name.trim() && i.cat === body.cat);
+        if (saved) { j = await api("photo", { id: saved.id, dataUrl: photo }); Object.assign(S, j); }
+      }
+      if (photo && thumbMap) thumbMap[draft.id || saved?.id] = photo;
+      toast(LIVE); location.hash = "#carta";
+    } catch (e) { toast(e.message, true); }
+    finally { busy = false; document.body.classList.remove("busy"); }
+  }
+
+  // ----- categories -----
+  let catDraft = null;
+  function drawCategorias() {
+    catDraft = catDraft || JSON.parse(JSON.stringify(S.menu.categories));
+    const count = (id) => S.menu.items.filter((i) => i.cat === id).length;
+    $("#s-categorias").innerHTML = `
+      <p class="sub" style="margin-top:4px">Cambia el nombre, el orden o añade una nueva. El orden es el mismo que ven tus clientes.</p>
+      <div id="clist">${catDraft.map((c, k) => `<div class="catrow">
+        <div class="ord"><button type="button" data-mv="${k}" data-d="-1" aria-label="Subir" ${k === 0 ? "disabled style=opacity:.3" : ""}><svg><use href="#i-up"/></svg></button><button type="button" data-mv="${k}" data-d="1" aria-label="Bajar" ${k === catDraft.length - 1 ? "disabled style=opacity:.3" : ""}><svg><use href="#i-down"/></svg></button></div>
+        <input class="inp" value="${esc(c.es)}" data-cn="${k}" aria-label="Nombre de la categoría" maxlength="40">
+        <small>${count(c.id)} platos</small>
+        ${c.id && count(c.id) ? `<label class="sw"><input type="checkbox" ${c.visible ? "checked" : ""} data-cv="${k}" aria-label="Mostrar ${esc(c.es)}"><i></i></label>` : `<button class="x-btn" type="button" data-cdel="${k}" aria-label="Borrar categoría">×</button>`}
+      </div>`).join("")}</div>
+      <button class="sbtn" type="button" id="cat-add" style="width:100%;justify-content:center;min-height:52px;border-style:dashed"><svg><use href="#i-plus"/></svg>Añadir categoría</button>
+      <div class="savebar"><button class="btn btn-primary" type="button" id="cat-save">Guardar</button></div>`;
+    const el = $("#s-categorias");
+    el.oninput = (e) => { const k = e.target.dataset.cn; if (k != null) catDraft[+k].es = e.target.value; };
+    el.onchange = (e) => { const k = e.target.dataset.cv; if (k != null) catDraft[+k].visible = e.target.checked; };
+    el.onclick = (e) => {
+      const mv = e.target.closest("[data-mv]");
+      if (mv) { const k = +mv.dataset.mv, d = +mv.dataset.d; [catDraft[k], catDraft[k + d]] = [catDraft[k + d], catDraft[k]]; drawCategorias(); }
+      const del = e.target.closest("[data-cdel]"); if (del) { catDraft.splice(+del.dataset.cdel, 1); drawCategorias(); }
+    };
+    $("#cat-add").onclick = () => { catDraft.push({ id: "", es: "Nueva categoría", en: "", visible: true }); drawCategorias(); $$("[data-cn]").at(-1).select(); };
+    $("#cat-save").onclick = () => act("categories", { categories: catDraft }, "Categorías guardadas · se verán en la web en 1–2 minutos", () => { catDraft = null; location.hash = "#carta"; });
+  }
+
+  // ----- hours -----
+  const T15 = []; for (let m = 7 * 60; m < 24 * 60; m += 15) T15.push(String(Math.floor(m / 60)).padStart(2, "0") + ":" + String(m % 60).padStart(2, "0"));
+  const opts = (v) => T15.map((t) => `<option ${t === v ? "selected" : ""}>${t}</option>`).join("");
+  let wk = null;
+  function drawHorario() {
+    wk = wk || JSON.parse(JSON.stringify(S.hours.week));
+    $("#s-horario").innerHTML = `
+      <p class="sub" style="margin-top:4px">Tu horario de siempre. Para vacaciones o un día suelto, usa <a href="#cierres" style="color:var(--tomato)">Vacaciones y cierres</a>.</p>
+      ${DAYS.map((d, k) => { const sh = wk[k]; return `<div class="day ${sh.length ? "" : "closed"}">
+        <div class="day-h"><b>${d}</b><span class="st">${sh.length ? "Abierto" : "Cerrado"}</span><label class="sw"><input type="checkbox" ${sh.length ? "checked" : ""} data-open="${k}" aria-label="${d} abierto"><i></i></label></div>
+        ${sh.map((s, j) => `<div class="times"><select class="inp" data-t="${k}.${j}.0" aria-label="Abre">${opts(s[0])}</select><span>a</span><select class="inp" data-t="${k}.${j}.1" aria-label="Cierra">${opts(s[1])}</select>${j > 0 ? `<button class="x-btn" type="button" data-rmshift="${k}.${j}" aria-label="Quitar turno">×</button>` : ""}</div>`).join("")}
+        ${sh.length === 1 ? `<button class="addshift" type="button" data-addshift="${k}">+ Añadir otro turno (mediodía)</button>` : ""}</div>`; }).join("")}
+      <div class="syncnote"><svg><use href="#i-check"/></svg><span>Al guardar se actualiza en <b>tu web</b>. Google Maps se actualizará solo cuando conectemos tu perfil de Google.</span></div>
+      <div class="savebar"><button class="btn btn-primary" type="button" id="h-save">Guardar horario</button></div>`;
+    const el = $("#s-horario");
+    el.onchange = (e) => {
+      const o = e.target.dataset.open; if (o != null) { wk[+o] = e.target.checked ? [["19:00", "23:00"]] : []; drawHorario(); return; }
+      const t = e.target.dataset.t; if (t) { const [k, j, x] = t.split(".").map(Number); wk[k][j][x] = e.target.value; }
+    };
+    el.onclick = (e) => {
+      const a = e.target.closest("[data-addshift]"); if (a) { wk[+a.dataset.addshift].unshift(["13:00", "16:00"]); drawHorario(); }
+      const r = e.target.closest("[data-rmshift]"); if (r) { const [k, j] = r.dataset.rmshift.split(".").map(Number); wk[k].splice(j, 1); drawHorario(); }
+    };
+    $("#h-save").onclick = () => {
+      const bad = wk.findIndex((d) => d.some((s) => s[0] >= s[1] && s[1] !== "00:00"));
+      if (bad >= 0) return toast(`${DAYS[bad]}: la hora de cierre debe ser después de la de apertura`, true);
+      act("hours", { week: wk }, "Horario guardado · se verá en la web en 1–2 minutos", () => { wk = null; drawHorario(); });
+    };
+  }
+
+  // ----- closures -----
+  const nextOpenAfter = (iso) => { for (let k = 1; k <= 14; k++) { const d = new Date(iso + "T12:00:00"); d.setDate(d.getDate() + k); const dow = (d.getDay() + 6) % 7; if (S.hours.week[dow].length) return d; } return null; };
+  function autoMsg(f, t, reason) {
+    if (!f || !t) return ["", ""];
+    const same = f === t, back = nextOpenAfter(t);
+    const what = reason === "vacaciones" ? "Estamos de vacaciones" : "Cerramos";
+    const whatEn = reason === "vacaciones" ? "We're on holiday" : "We're closed";
+    const es = same ? `${what} el ${fmtDay(f, { weekday: "long", day: "numeric", month: "long" })}.` : `${what} del ${fmtDay(f)} al ${fmtDay(t)}.`;
+    const en = same ? `${whatEn} on ${new Date(f + "T12:00:00").toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long" })}.` : `${whatEn} from ${new Date(f + "T12:00:00").toLocaleDateString("en-GB", { day: "numeric", month: "long" })} to ${new Date(t + "T12:00:00").toLocaleDateString("en-GB", { day: "numeric", month: "long" })}.`;
+    return back ? [`${es} ¡Volvemos el ${back.toLocaleDateString("es-ES", { weekday: "long", day: "numeric" })}!`, `${en} Back on ${back.toLocaleDateString("en-GB", { weekday: "long", day: "numeric" })}!`] : [es, en];
+  }
+  let cl = null;
+  function drawCierres() {
+    const up = S.closures.filter((c) => c.to >= today());
+    cl = cl || { reason: "vacaciones", from: "", to: "", msg_es: "", msg_en: "", touched: false };
+    $("#s-cierres").innerHTML = `
+      <h2 class="sec" style="margin-top:4px">Próximos cierres</h2>
+      ${up.length ? up.map((c) => `<div class="card closure" style="margin-bottom:10px">
+          <div class="cal"><i>${esc(new Date(c.from + "T12:00:00").toLocaleDateString("es-ES", { month: "short" }).replace(".", ""))}</i><b>${new Date(c.from + "T12:00:00").getDate()}</b></div>
+          <div style="flex:1"><b style="font:600 18px var(--serif)">${c.from === c.to ? esc(fmtDay(c.from)) : `${esc(fmtDay(c.from))} → ${esc(fmtDay(c.to))}`}</b><small style="display:block;color:var(--ink-3)">${esc(c.msg_es)}</small>
+            <div class="story-btns" style="margin-top:10px;flex-direction:row;flex-wrap:wrap"><button class="sbtn" type="button" data-story="${esc(c.id)}">Historia para Instagram</button><button class="sbtn" type="button" data-cdel2="${esc(c.id)}">Anular</button></div></div>
+        </div>`).join("") : `<p class="empty-note">No hay cierres programados.</p>`}
+      <h2 class="sec">Nuevo cierre</h2>
+      <div class="field"><span>Motivo</span><div class="seg" id="reason"><button type="button" data-v="vacaciones">Vacaciones</button><button type="button" data-v="festivo">Festivo</button><button type="button" data-v="otro">Otro</button></div></div>
+      <div class="dates">
+        <label class="field"><span>Cerrado desde</span><input class="inp" type="date" id="c-from" min="${today()}" value="${esc(cl.from)}"></label>
+        <label class="field"><span>Hasta (incluido)</span><input class="inp" type="date" id="c-to" min="${today()}" value="${esc(cl.to)}"></label>
+      </div>
+      <label class="field"><span>Mensaje para tus clientes <em>(lo escribimos por ti)</em></span><textarea class="inp" id="c-msg" maxlength="220">${esc(cl.msg_es)}</textarea></label>
+      <div class="field"><span>Dónde se avisa</span>
+        <ul class="channels">
+          <li><span class="lg" style="background:var(--ink)">W</span><div class="t"><b>Tu web y la carta QR</b><small>Aviso arriba en todas las páginas desde 10 días antes, y estado «Cerrado por vacaciones»</small></div><span class="pill ok">Automático</span></li>
+          <li><span class="lg" style="background:#4285F4">G</span><div class="t"><b>Google Maps</b><small>Lo conectaremos con tu perfil de Google. Mientras tanto, avisamos a The Branding House para ponerlo.</small></div><span class="pill muted">Pendiente</span></li>
+          <li><span class="lg" style="background:linear-gradient(45deg,#F58529,#DD2A7B,#8134AF)">IG</span><div class="t"><b>Instagram</b><small>Te preparamos la historia con tu logo: la compartes con un toque.</small></div><span class="pill ok">1 toque</span></li>
+          <li><span class="lg" style="background:#FFC244;color:#1C1714">Gl</span><div class="t"><b>Glovo</b><small>Ciérralo en Glovo Manager esos días</small></div><a class="pill warn" href="https://managers.glovoapp.com/" target="_blank" rel="noopener">Abrir</a></li>
+          <li><span class="lg" style="background:#06C167">UE</span><div class="t"><b>Uber Eats</b><small>Ciérralo en Uber Eats Manager esos días</small></div><a class="pill warn" href="https://merchants.ubereats.com/" target="_blank" rel="noopener">Abrir</a></li>
+        </ul></div>
+      <div class="savebar"><button class="btn btn-primary" type="button" id="c-save">Programar cierre</button></div>`;
+    setSeg("#reason", cl.reason);
+    const refresh = () => { if (!cl.touched) { [cl.msg_es, cl.msg_en] = autoMsg(cl.from, cl.to, cl.reason); $("#c-msg").value = cl.msg_es; } };
+    $("#reason").onclick = (e) => { const b = e.target.closest("button"); if (!b) return; cl.reason = b.dataset.v; setSeg("#reason", cl.reason); refresh(); };
+    $("#c-from").onchange = (e) => { cl.from = e.target.value; if (!cl.to || cl.to < cl.from) { cl.to = cl.from; $("#c-to").value = cl.to; } refresh(); };
+    $("#c-to").onchange = (e) => { cl.to = e.target.value; refresh(); };
+    $("#c-msg").oninput = (e) => { cl.msg_es = e.target.value; cl.touched = true; cl.msg_en = ""; };
+    $("#c-save").onclick = () => {
+      if (!cl.from || !cl.to) return toast("Elige las fechas del cierre", true);
+      act("closure", { from: cl.from, to: cl.to, reason: cl.reason, msg_es: cl.msg_es, msg_en: cl.msg_en }, "Cierre programado · ya sale en la web en 1–2 minutos", (j) => { cl = null; drawCierres(); });
+    };
+    $$("[data-cdel2]").forEach((b) => (b.onclick = () => confirm("¿Anular este cierre?") && act("closure-delete", { id: b.dataset.cdel2 }, "Cierre anulado", () => drawCierres())));
+    $$("[data-story]").forEach((b) => (b.onclick = () => story(S.closures.find((c) => c.id === b.dataset.story))));
+  }
+
+  // Instagram story (1080×1920) drawn on a canvas, then shared or downloaded.
+  async function story(c) {
+    const cv = $("#story-c"), x = cv.getContext("2d");
+    await document.fonts.ready;
+    x.fillStyle = "#D3201B"; x.fillRect(0, 0, 1080, 1920);
+    x.strokeStyle = "rgba(255,255,255,.08)"; x.lineWidth = 120; x.beginPath(); x.arc(980, 140, 420, 0, Math.PI * 2); x.stroke();
+    x.fillStyle = "#FBF7F0"; x.beginPath(); x.arc(540, 560, 190, 0, Math.PI * 2); x.fill();
+    const img = new Image(); img.src = LOGO; await img.decode();
+    const w = 280, h = w * img.height / img.width; x.drawImage(img, 540 - w / 2, 560 - h / 2, w, h);
+    x.fillStyle = "#fff"; x.textAlign = "center";
+    x.font = "600 104px Fraunces, Georgia, serif"; x.fillText(c.reason === "vacaciones" ? "Cerramos por" : "Hoy", 540, 930);
+    x.font = "italic 500 116px Fraunces, Georgia, serif"; x.fillStyle = "#FFE2C8"; x.fillText(c.reason === "vacaciones" ? "vacaciones" : "cerramos", 540, 1060);
+    x.fillStyle = "#FFE2D9"; x.font = "500 50px 'Instrument Sans', system-ui, sans-serif";
+    const words = c.msg_es.split(" "); let line = "", y = 1200;
+    for (const wd of words) { if (x.measureText(line + wd).width > 860) { x.fillText(line.trim(), 540, y); line = ""; y += 70; } line += wd + " "; }
+    x.fillText(line.trim(), 540, y);
+    x.font = "700 34px 'Instrument Sans', system-ui, sans-serif"; x.fillText("RINGOPIZZERIA.COM", 540, 1800);
+    const blob = await new Promise((r) => cv.toBlob(r, "image/png"));
+    const file = new File([blob], "ringo-cierre.png", { type: "image/png" });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) { try { await navigator.share({ files: [file] }); return; } catch (e) { /* cancelled */ } }
+    const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "ringo-cierre.png"; a.click();
+    toast("Imagen descargada: súbela como historia en Instagram");
+  }
+
+  // ---------- login ----------
+  $("#login-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const email = $("#login-email").value.trim(); $("#login-err").hidden = true;
+    try { await api("login", { email }); $("#login-form").hidden = true; $("#login-sent").hidden = false; try { localStorage.setItem("rb-email", email); } catch (x) {} }
+    catch (er) { $("#login-err").textContent = er.message; $("#login-err").hidden = false; }
+  });
+  $("#login-again").onclick = () => { $("#login-form").hidden = false; $("#login-sent").hidden = true; };
+  try { $("#login-email").value = localStorage.getItem("rb-email") || ""; } catch (x) {}
+
+  // ---------- router ----------
+  async function route() {
+    let [r, id] = (location.hash.slice(1) || "inicio").split("/");
+    if (r === "caducado") { toast("Ese enlace ha caducado. Pide uno nuevo.", true); r = "login"; }
+    if (r !== "login" && !S) {
+      try { S = await api("data"); } catch (e) { r = "login"; }
+    }
+    if (!(r in TITLES)) r = "inicio";
+    const scr = r === "nuevo" ? "plato" : r;
+    $$(".screen").forEach((s) => s.classList.toggle("on", s.id === "s-" + scr));
+    $("#app").classList.toggle("no-tabs", r === "login");
+    const tab = { plato: "carta", nuevo: "carta", categorias: "carta" }[r] || r;
+    $$(".tabs a").forEach((a) => a.classList.toggle("on", a.dataset.tab === tab));
+    drawBar(r);
+    if (r === "inicio") drawInicio();
+    if (r === "carta") drawCarta();
+    if (r === "plato" || r === "nuevo") { if (!thumbMap) await loadThumbs(); drawPlato(r === "plato" ? decodeURIComponent(id || "") : null); }
+    if (r === "categorias") { catDraft = null; drawCategorias(); }
+    if (r === "horario") { wk = null; drawHorario(); }
+    if (r === "cierres") drawCierres();
+    window.scrollTo(0, 0);
+  }
+  window.addEventListener("hashchange", route);
+  route();
+})();
+</script>
+</body>
+</html>

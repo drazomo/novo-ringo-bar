@@ -1,0 +1,12 @@
+---
+import Base from "../layouts/Base.astro";
+import { graph, website } from "../lib/seo";
+---
+<Base lang="es" title="Página no encontrada · Pizzería Ringo Bar" description="Esta página no existe. Mira la carta o vuelve al inicio." path="/404" altPath="/en" jsonld={graph(website("es"))}>
+  <section style="padding:96px 0 120px"><div class="wrap">
+    <p style="font:600 13px var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--tomato)">Error 404</p>
+    <h1 style="font:600 clamp(40px,6vw,72px)/1 var(--serif);margin:0 0 18px">Esta página no existe.</h1>
+    <p style="color:var(--ink-2);max-width:32em;margin:0 0 28px">Puede que el enlace sea antiguo. La carta y el horario están aquí:</p>
+    <a class="btn btn-primary" href="/carta">Ver la carta</a> <a class="btn btn-ghost" href="/">Inicio</a>
+  </div></section>
+</Base>

@@ -1,0 +1,21 @@
+{
+  "name": "ringo-bar-pizzeria",
+  "version": "3.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": "24.x"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check:data": "node scripts/check-data.mjs"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.6",
+    "@astrojs/vercel": "^11.0.22",
+    "astro": "^7.4.13",
+    "sharp": "^0.35.5"
+  }
+}
