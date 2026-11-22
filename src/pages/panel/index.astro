@@ -69,7 +69,7 @@ const lg = await getImage({ src: logo, width: 192, format: "png" });
     <a href="#horario" data-tab="horario"><svg><use href="#i-clock"/></svg>Horario</a>
     <a href="#cierres" data-tab="cierres"><svg><use href="#i-sun"/></svg>Cierres</a>
   </nav>
-  <div class="toast" id="toast" role="status"><svg><use href="#i-check"/></svg><span></span></div>
+  <div class="toast" id="toast" role="status"><svg><use href="#i-check"/></svg><span></span><button class="toast-undo" type="button" hidden>Deshacer</button></div>
   <canvas class="story-c" id="story-c" width="1080" height="1920"></canvas>
 </div>
 
@@ -98,7 +98,7 @@ const lg = await getImage({ src: logo, width: 192, format: "png" });
   }
   async function act(action, body, msg = LIVE, then) {
     if (busy) return; busy = true; document.body.classList.add("busy");
-    try { const j = await api(action, body); Object.assign(S, j); toast(msg); then && then(j); }
+    try { const j = await api(action, body); Object.assign(S, j); toast(msg, false, action !== "undo" && msg === LIVE ? S.changes[0]?.id : undefined); then && then(j); }
     catch (e) { toast(e.message, true); }
     finally { busy = false; document.body.classList.remove("busy"); }
   }
@@ -115,10 +115,18 @@ const lg = await getImage({ src: logo, width: 192, format: "png" });
     const lo = $("#logout"); lo && lo.addEventListener("click", async () => { await api("logout", {}); S = null; location.hash = "#login"; });
   }
   let tt;
-  function toast(m, bad) {
-    const t = $("#toast"); t.querySelector("span").textContent = m; t.style.background = bad ? "#A9170F" : "";
-    t.classList.add("show"); clearTimeout(tt); tt = setTimeout(() => t.classList.remove("show"), bad ? 5000 : 3200);
+  function toast(m, bad, undoId) {
+    const t = $("#toast"), b = t.querySelector(".toast-undo");
+    t.querySelector("span").textContent = m; t.style.background = bad ? "#A9170F" : "";
+    b.hidden = !undoId; b.dataset.id = undoId || "";
+    t.classList.toggle("has-undo", !!undoId);
+    t.classList.add("show"); clearTimeout(tt); tt = setTimeout(() => t.classList.remove("show"), bad ? 5000 : undoId ? 8000 : 3200);
   }
+  const UNDONE = "Deshecho · se verá en la web en 1–2 minutos";
+  const ckey = (c) => `${c.kind}:${c.target ?? ""}`;
+  // only the newest change for each dish / closure / hours / categories can be undone
+  function undoable() { const seen = new Set(), ok = new Set(); for (const c of S.changes) { const k = ckey(c); if (!seen.has(k)) { seen.add(k); ok.add(c.id); } } return ok; }
+  function undoNow(id) { $("#toast").classList.remove("show"); act("undo", { id }, UNDONE, () => { if ((location.hash || "#inicio") === "#inicio") drawInicio(); else route(); }); }
 
   // ---------- status ----------
   function statusNow() {
@@ -152,7 +160,7 @@ const lg = await getImage({ src: logo, width: 192, format: "png" });
         <a class="tile" href="#categorias"><span class="ic"><svg><use href="#i-img"/></svg></span><b>Categorías</b><small>Pizzas, entrantes…</small></a>
       </div>
       <h2 class="sec">Últimos cambios</h2>
-      ${S.changes.length ? `<ul class="log">${S.changes.slice(0, 8).map((c) => `<li><span>${esc(c.summary)}<small>${esc(ago(c.at))}</small></span><button class="undo" type="button" data-undo="${esc(c.id)}">Deshacer</button></li>`).join("")}</ul>` : `<p class="empty-note">Todavía no hay cambios.</p>`}
+      ${S.changes.length ? `<ul class="log">${(() => { const ok = undoable(); return S.changes.slice(0, 8).map((c) => `<li><span>${esc(c.summary)}<small>${esc(ago(c.at))}</small></span>${ok.has(c.id) ? `<button class="undo" type="button" data-undo="${esc(c.id)}">${c.summary.startsWith("Deshecho:") ? "Rehacer" : "Deshacer"}</button>` : ""}</li>`).join(""); })()}</ul>` : `<p class="empty-note">Todavía no hay cambios.</p>`}
       <p style="margin:22px 4px 0"><a class="txt-btn" style="padding:0" href="/carta" target="_blank" rel="noopener">Ver mi carta en la web ↗</a></p>
       ${S.storage === "local" ? `<p class="empty-note">Modo prueba: los cambios se guardan en este ordenador, no en GitHub.</p>` : ""}`;
   }
@@ -197,7 +205,8 @@ const lg = await getImage({ src: logo, width: 192, format: "png" });
   document.addEventListener("click", (e) => {
     const c = e.target.closest("#pchips [data-c]"); if (c) { catFilter = c.dataset.c; drawCarta(); }
     const u = e.target.closest("[data-undo]");
-    if (u && confirm("¿Deshacer este cambio?")) act("undo", { id: u.dataset.undo }, "Deshecho · se verá en la web en 1–2 minutos", () => drawInicio());
+    if (u && confirm("¿Deshacer este cambio?")) undoNow(u.dataset.undo);
+    const tu = e.target.closest(".toast-undo"); if (tu && tu.dataset.id) undoNow(tu.dataset.id);
   });
 
   // ----- item editor -----
@@ -315,7 +324,7 @@ const lg = await getImage({ src: logo, width: 192, format: "png" });
         if (saved) { j = await api("photo", { id: saved.id, dataUrl: photo }); Object.assign(S, j); }
       }
       if (photo && thumbMap) thumbMap[draft.id || saved?.id] = photo;
-      toast(LIVE); location.hash = "#carta";
+      toast(LIVE, false, S.changes[0]?.id); location.hash = "#carta";
     } catch (e) { toast(e.message, true); }
     finally { busy = false; document.body.classList.remove("busy"); }
   }

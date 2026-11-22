@@ -160,10 +160,16 @@ export function deleteClosure(s: State, who: string, id: string) {
   return { change: record(s, who, { summary: `Cierre anulado: ${before!.from} → ${before!.to}`, kind: "closure", target: id, before }), files: ["closures"] as const };
 }
 
+/** Same dish / same closure / the hours / the categories. */
+export const changeKey = (c: Pick<Change, "kind" | "target">) => `${c.kind}:${c.target ?? ""}`;
+
 export function undo(s: State, who: string, changeId: string) {
   const ch = s.changes.find((c) => c.id === changeId);
   must(ch, "Ese cambio ya no está en el historial.");
   const c = ch!;
+  // Undoing an older change would silently wipe out newer edits to the same thing.
+  const newest = s.changes.find((x) => changeKey(x) === changeKey(c));
+  must(newest?.id === c.id, "Hay un cambio más reciente en esto mismo. Deshaz primero el más reciente.");
   if (c.kind === "item") {
     const idx = s.menu.items.findIndex((i) => i.id === c.target);
     const current = idx >= 0 ? s.menu.items[idx] : null;

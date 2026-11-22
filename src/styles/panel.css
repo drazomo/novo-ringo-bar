@@ -167,6 +167,10 @@ details.en .in{padding:0 16px 6px}
 
 .toast{position:fixed;z-index:60;left:50%;top:calc(70px + env(safe-area-inset-top));transform:translate(-50%,-20px);opacity:0;pointer-events:none;background:var(--ink);color:#fff;padding:14px 18px;border-radius:14px;font-size:15px;max-width:min(92vw,520px);display:flex;gap:10px;align-items:center;transition:.2s;box-shadow:0 12px 30px rgba(0,0,0,.25)}
 .toast.show{opacity:1;transform:translate(-50%,0)}
+.toast.has-undo{width:min(92vw,440px);padding:10px 10px 10px 16px}
+.toast.show.has-undo{pointer-events:auto}
+.toast span{flex:1}
+.toast-undo{flex:none;margin-left:6px;min-height:40px;padding:0 16px;border-radius:999px;border:0;background:#fff;color:var(--ink);font:700 14px var(--sans);cursor:pointer}
 .toast svg{width:20px;height:20px;color:#7DD69A;flex:none}
 
 @media (min-width:700px){ body{padding:24px 0} .app{border-radius:24px;overflow:hidden;min-height:calc(100vh - 48px)} .tabs{bottom:24px;border-radius:0 0 24px 24px} }
