@@ -72,7 +72,7 @@
       ],
       "status": "on",
       "soldOutOn": null,
-      "photo": null
+      "photo": "trufada.jpg"
     },
     {
       "id": "burrata",
@@ -87,7 +87,7 @@
       ],
       "status": "on",
       "soldOutOn": null,
-      "photo": null
+      "photo": "burrata.jpg"
     },
     {
       "id": "marinara",
@@ -117,7 +117,7 @@
       ],
       "status": "on",
       "soldOutOn": null,
-      "photo": null
+      "photo": "margherita.jpg"
     },
     {
       "id": "jamon-york",
@@ -130,7 +130,7 @@
       "tags": [],
       "status": "on",
       "soldOutOn": null,
-      "photo": null
+      "photo": "jamon-york.jpg"
     },
     {
       "id": "romana",
@@ -143,7 +143,7 @@
       "tags": [],
       "status": "on",
       "soldOutOn": null,
-      "photo": null
+      "photo": "romana.jpg"
     },
     {
       "id": "bismarck",
@@ -197,7 +197,7 @@
       "tags": [],
       "status": "on",
       "soldOutOn": null,
-      "photo": null
+      "photo": "york-bacon.jpg"
     },
     {
       "id": "york-champinon",
@@ -249,7 +249,7 @@
       "tags": [],
       "status": "on",
       "soldOutOn": null,
-      "photo": null
+      "photo": "capricciosa.jpg"
     },
     {
       "id": "carbonara",
@@ -288,7 +288,7 @@
       "tags": [],
       "status": "on",
       "soldOutOn": null,
-      "photo": null
+      "photo": "pollo.jpg"
     },
     {
       "id": "porca",
@@ -316,7 +316,7 @@
       ],
       "status": "on",
       "soldOutOn": null,
-      "photo": null
+      "photo": "vegetal.jpg"
     },
     {
       "id": "serrano",
@@ -357,7 +357,7 @@
       "tags": [],
       "status": "on",
       "soldOutOn": null,
-      "photo": null
+      "photo": "barbacoa.jpg"
     },
     {
       "id": "bufala",
@@ -532,7 +532,7 @@
       "tags": [],
       "status": "on",
       "soldOutOn": null,
-      "photo": null
+      "photo": "panino-jamon-serrano.jpg"
     },
     {
       "id": "panino-jamon-york",
@@ -545,7 +545,7 @@
       "tags": [],
       "status": "on",
       "soldOutOn": null,
-      "photo": null
+      "photo": "panino-jamon-york.jpg"
     },
     {
       "id": "panino-salami-picante",
@@ -560,7 +560,7 @@
       ],
       "status": "on",
       "soldOutOn": null,
-      "photo": null
+      "photo": "panino-salami-picante.jpg"
     },
     {
       "id": "postre-del-dia",
@@ -586,7 +586,7 @@
       "tags": [],
       "status": "on",
       "soldOutOn": null,
-      "photo": null
+      "photo": "pizza-de-nutella.jpg"
     },
     {
       "id": "agua",
