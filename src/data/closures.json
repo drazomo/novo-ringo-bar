@@ -1,1 +1,10 @@
-[]
+[
+  {
+    "id": "3a879765",
+    "from": "2031-01-01",
+    "to": "2031-01-02",
+    "reason": "otro",
+    "msg_es": "Prueba Cloudflare TBH (se deshace)",
+    "msg_en": "Cloudflare test"
+  }
+]
