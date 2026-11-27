@@ -22,10 +22,10 @@ const NOTES: Record<string, string> = es
   ? { calzones: "Pizza cerrada, rellena y horneada.", extras: "Añádelos a cualquier pizza." }
   : { calzones: "Folded, filled and baked pizza.", extras: "Add them to any pizza." };
 
-const title = es ? "Carta y precios · Pizzería Ringo Bar, Valencia (Campanar)" : "Menu & prices · Ringo Bar Pizzeria, Valencia (Campanar)";
+const title = es ? "Carta y precios · Pizzería Ringo, Valencia (Campanar)" : "Menu & prices · Pizzería Ringo, Valencia (Campanar)";
 const description = es
-  ? `Carta completa de la Pizzería Ringo Bar en València: ${n("pizzas")} pizzas, ${n("calzones")} calzones, entrantes, paninis, postres y bebidas, con precios. Margherita, Burrata, Trufada y la pizza Ringo.`
-  : `Full menu of Ringo Bar Pizzeria in Valencia: ${n("pizzas")} pizzas, ${n("calzones")} calzones, starters, panini, desserts and drinks, with prices.`;
+  ? `Carta completa de la Pizzería Ringo en València: ${n("pizzas")} pizzas, ${n("calzones")} calzones, entrantes, paninis, postres y bebidas, con precios. Margherita, Burrata, Trufada y la pizza Ringo.`
+  : `Full menu of Pizzería Ringo in Valencia: ${n("pizzas")} pizzas, ${n("calzones")} calzones, starters, panini, desserts and drinks, with prices.`;
 const heroImg = await getImage({ src: hero, width: 1200, format: "jpg" });
 const logoImg = await getImage({ src: logo, width: 400, format: "png" });
 const jsonld = graph(

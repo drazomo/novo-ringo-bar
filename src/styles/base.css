@@ -1,4 +1,4 @@
-/* Ringo Bar: shared tokens + components (v3 mockup) */
+/* Pizzería Ringo: shared tokens + components (v3 mockup) */
 @font-face{font-family:"Fraunces";src:url(/fonts/fraunces.woff2) format("woff2");font-weight:100 900;font-style:normal;font-display:swap}
 @font-face{font-family:"Fraunces";src:url(/fonts/fraunces-italic.woff2) format("woff2");font-weight:100 900;font-style:italic;font-display:swap}
 @font-face{font-family:"Instrument Sans";src:url(/fonts/instrument-sans.woff2) format("woff2");font-weight:400 700;font-display:swap}
@@ -101,3 +101,29 @@ footer .fine{width:100%;margin-top:18px;font-size:12.5px;color:#8F8378}
 .sizes{font-size:14px!important;color:var(--ink-3)!important}
 
 footer address a{text-decoration:underline;text-underline-offset:3px}
+
+/* Phones: the longer name ("Pizzería Ringo") + status + EN don't fit on one row.
+   Logo | name / status underneath | EN. */
+@media (max-width:640px){
+  .top .wrap{display:grid;grid-template-columns:auto minmax(0,1fr) auto;grid-template-areas:"logo name lang" "logo status lang";column-gap:10px;row-gap:3px;align-content:center}
+  .brand{display:contents}
+  .brand img{grid-area:logo;align-self:center}
+  .brand>span{grid-area:name;align-self:end;min-width:0}
+  .brand b{display:block;font-size:20px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .top .status{grid-area:status;align-self:start;margin-left:0;font-size:12.5px;min-width:0}
+  .top .status [data-status-text]{max-width:none}
+  .langlink{grid-area:lang;align-self:center}
+}
+
+/* Small tablets: same stacked name/status, plus the order button */
+@media (min-width:641px) and (max-width:900px){
+  .top .wrap{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;grid-template-areas:"logo name lang btn" "logo status lang btn";column-gap:12px;row-gap:3px;align-content:center}
+  .brand{display:contents}
+  .brand img{grid-area:logo;align-self:center}
+  .brand>span{grid-area:name;align-self:end;min-width:0}
+  .brand small{display:none}
+  .brand b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .top .status{grid-area:status;align-self:start;margin-left:0;font-size:12.5px;min-width:0}
+  .langlink{grid-area:lang;align-self:center}
+  .top .btn{grid-area:btn;align-self:center;white-space:nowrap}
+}

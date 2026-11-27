@@ -14,8 +14,8 @@ const closuresMd = (l: Lang) => {
 export function menuMarkdown(l: Lang) {
   const es = l === "es";
   const head = es
-    ? `# Carta de la Pizzería Ringo Bar (València)\n\nPizzería italiana en ${site.address.street}, ${site.address.postalCode} ${site.address.city} (barrio de Campanar). Teléfono ${site.phoneDisplay}. Precios en el local, IVA incluido; en Glovo pueden variar. Actualizada: ${lastUpdated().toISOString().slice(0, 10)}.\n`
-    : `# Ringo Bar Pizzeria menu (Valencia)\n\nItalian pizzeria at ${site.address.street}, ${site.address.postalCode} ${site.address.city} (Campanar). Phone ${site.phoneDisplay}. In-restaurant prices, VAT included; Glovo prices may differ. Updated: ${lastUpdated().toISOString().slice(0, 10)}.\n`;
+    ? `# Carta de la Pizzería Ringo (València)\n\nPizzería italiana en ${site.address.street}, ${site.address.postalCode} ${site.address.city} (barrio de Campanar). Teléfono ${site.phoneDisplay}. Precios en el local, IVA incluido; en Glovo pueden variar. Actualizada: ${lastUpdated().toISOString().slice(0, 10)}.\n`
+    : `# Pizzería Ringo menu (Valencia)\n\nItalian pizzeria at ${site.address.street}, ${site.address.postalCode} ${site.address.city} (Campanar). Phone ${site.phoneDisplay}. In-restaurant prices, VAT included; Glovo prices may differ. Updated: ${lastUpdated().toISOString().slice(0, 10)}.\n`;
   const body = visibleCats().map((c) =>
     `\n## ${catName(c, l)}\n\n` + c.items.map((i) => {
       const d = descOf(i, l);

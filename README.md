@@ -1,6 +1,6 @@
-# Pizzería Ringo Bar: ringopizzeria.com (v3)
+# Pizzería Ringo: ringopizzeria.com (v3)
 
-Website and owner panel for Pizzería Ringo Bar, an Italian pizzeria in Campanar, València.
+Website and owner panel for Pizzería Ringo, an Italian pizzeria in Campanar, València.
 Built by The Branding House (TBH) in November 2026. It replaces the 2023 Next.js + Sanity site (that code is still on `main` until v3 is merged).
 
 ## What's in it

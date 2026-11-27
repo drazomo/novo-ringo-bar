@@ -17,7 +17,7 @@ export function restaurant(l: Lang, imageUrl: string, logoUrl: string) {
     "@type": "Restaurant",
     "@id": RESTAURANT_ID,
     name: site.name,
-    alternateName: ["Ringo Bar", "Ringo Pizzeria", "Pizzería Ringo"],
+    alternateName: ["Pizzeria Ringo", "Ringo Bar", "Pizzería Ringo Bar", "Ringo Pizzeria y Panini Italiani"],
     url: site.url + "/",
     image: [imageUrl],
     logo: logoUrl,
@@ -42,7 +42,7 @@ export function menuSchema(l: Lang) {
   return {
     "@type": "Menu",
     "@id": abs(ROUTES[l].carta) + "#menu",
-    name: l === "es" ? "Carta de la Pizzería Ringo Bar" : "Ringo Bar Pizzeria menu",
+    name: l === "es" ? "Carta de la Pizzería Ringo" : "Pizzería Ringo menu",
     inLanguage: l,
     url: abs(ROUTES[l].carta),
     hasMenuSection: visibleCats().map((c) => ({

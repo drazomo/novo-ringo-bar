@@ -129,7 +129,7 @@ const sheets = [
       <div class="frame"><div class="scaler">
         {s.id === "cartel" && (
           <div class="sheet" id="cartel">
-            <img class="logo" src={lg.src} alt="Ringo Bar">
+            <img class="logo" src={lg.src} alt="Pizzería Ringo">
             <div class="eyebrow">Pizzería italiana · {site.address.neighbourhood}, València</div>
             <h3>Nuestra <span class="it">carta</span></h3>
             <div class="en">Our menu</div>
@@ -143,7 +143,7 @@ const sheets = [
           <div class="sheet" id="mesa">
             {[0, 1, 2, 3].map(() => (
               <div class="card">
-                <div class="head"><img src={lg.src} alt=""><b>Ringo Bar</b></div>
+                <div class="head"><img src={lg.src} alt=""><b>Pizzería Ringo</b></div>
                 <h4>La <span class="it">carta</span></h4>
                 <div class="en">Our menu</div>
                 <div class="qr"><Fragment set:html={qr} /><img src={lg.src} alt=""></div>
@@ -158,7 +158,7 @@ const sheets = [
             {Array.from({ length: 12 }).map(() => (
               <div class="stk">
                 <div class="qr"><Fragment set:html={qr} /><img src={lg.src} alt=""></div>
-                <b>Ringo Bar</b>
+                <b>Pizzería Ringo</b>
                 <small>La carta · Menu</small>
               </div>
             ))}
