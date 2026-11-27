@@ -467,7 +467,7 @@
       "tags": [],
       "status": "on",
       "soldOutOn": null,
-      "photo": null
+      "photo": "mozzarella-sticks.jpg"
     },
     {
       "id": "nuggets-de-pollo",
@@ -480,7 +480,7 @@
       "tags": [],
       "status": "on",
       "soldOutOn": null,
-      "photo": null
+      "photo": "nuggets-de-pollo.jpg"
     },
     {
       "id": "patatas-fritas",
@@ -493,7 +493,7 @@
       "tags": [],
       "status": "on",
       "soldOutOn": null,
-      "photo": null
+      "photo": "patatas-fritas.jpg"
     },
     {
       "id": "tequenos-de-queso",
@@ -506,7 +506,7 @@
       "tags": [],
       "status": "on",
       "soldOutOn": null,
-      "photo": null
+      "photo": "tequenos-de-queso.jpg"
     },
     {
       "id": "tabla-de-embutidos-italianos-y-pan-focaccia",
@@ -517,6 +517,36 @@
       "desc_en": "",
       "price": 11,
       "tags": [],
+      "status": "on",
+      "soldOutOn": null,
+      "photo": null
+    },
+    {
+      "id": "focaccia-aceite-de-oliva",
+      "cat": "entrantes",
+      "name": "Focaccia con aceite de oliva",
+      "name_en": "Focaccia with olive oil",
+      "desc": "Base de pizza con aceite de oliva, romero, sal y orégano.",
+      "desc_en": "Pizza dough with olive oil, rosemary, salt and oregano.",
+      "price": 4.5,
+      "tags": [
+        "sincarne"
+      ],
+      "status": "on",
+      "soldOutOn": null,
+      "photo": null
+    },
+    {
+      "id": "focaccia-de-ajo",
+      "cat": "entrantes",
+      "name": "Focaccia de ajo",
+      "name_en": "Garlic focaccia",
+      "desc": "Base de pizza con ajo, romero, sal y orégano.",
+      "desc_en": "Pizza dough with garlic, rosemary, salt and oregano.",
+      "price": 4.5,
+      "tags": [
+        "sincarne"
+      ],
       "status": "on",
       "soldOutOn": null,
       "photo": null
@@ -563,6 +593,19 @@
       "photo": "panino-salami-picante.jpg"
     },
     {
+      "id": "panino-serrano-y-burrata",
+      "cat": "bocadillos",
+      "name": "Panino Serrano y Burrata",
+      "name_en": "Serrano Ham & Burrata Panino",
+      "desc": "Pan focaccia casero, con jamón serrano, burrata y aceite de oliva.",
+      "desc_en": "Homemade focaccia bread with serrano ham, burrata and olive oil.",
+      "price": 10.5,
+      "tags": [],
+      "status": "on",
+      "soldOutOn": null,
+      "photo": "panino-serrano-y-burrata.jpg"
+    },
+    {
       "id": "postre-del-dia",
       "cat": "postres",
       "name": "Postre del día",
@@ -589,6 +632,19 @@
       "photo": "pizza-de-nutella.jpg"
     },
     {
+      "id": "coulant-de-pistacho",
+      "cat": "postres",
+      "name": "Coulant de pistacho",
+      "name_en": "Pistachio coulant",
+      "desc": "Coulant de pistacho.",
+      "desc_en": "Warm pistachio lava cake.",
+      "price": 7.5,
+      "tags": [],
+      "status": "on",
+      "soldOutOn": null,
+      "photo": null
+    },
+    {
       "id": "agua",
       "cat": "bebidas",
       "name": "Agua",
@@ -599,7 +655,7 @@
       "tags": [],
       "status": "on",
       "soldOutOn": null,
-      "photo": null,
+      "photo": "agua.jpg",
       "sizes": [
         {
           "es": "Pequeña",
@@ -656,7 +712,7 @@
       "tags": [],
       "status": "on",
       "soldOutOn": null,
-      "photo": null
+      "photo": "refrescos.jpg"
     },
     {
       "id": "cerveza-tercio",
