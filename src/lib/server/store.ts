@@ -1,17 +1,16 @@
-// Storage for Panel Ringo.
+// Storage for the owner panel.
 // Production: reads and commits files in the GitHub repo (GITHUB_TOKEN + GITHUB_REPO + GITHUB_BRANCH);
-// every save is one commit, and Vercel redeploys the site from it.
+// every save is one commit, and the host (Cloudflare Workers Builds or Vercel) redeploys the site from it.
 // Local development (no GITHUB_TOKEN): reads and writes the working tree directly.
-import fs from "node:fs/promises";
-import path from "node:path";
+import { env, isProd, site } from "./env";
+const localFs = async () => ({ fs: await import("node:fs/promises"), path: await import("node:path") });
 
 export type FileWrite = { path: string; content: string | Buffer };
 
-const env = (k: string) => process.env[k] || (import.meta.env as Record<string, string | undefined>)[k];
 const token = () => env("GITHUB_TOKEN");
-const repo = () => env("GITHUB_REPO") || "drazomo/novo-ringo-bar";
-const branch = () => env("GITHUB_BRANCH") || "main";
-export const storageMode = () => (token() ? "github" : process.env.VERCEL ? "missing" : "local");
+const repo = () => site.repo();
+const branch = () => site.branch();
+export const storageMode = () => (token() && repo() ? "github" : isProd() ? "missing" : "local");
 
 async function gh(pathname: string, init: RequestInit = {}) {
   const r = await fetch(`https://api.github.com/repos/${repo()}${pathname}`, {
@@ -20,7 +19,7 @@ async function gh(pathname: string, init: RequestInit = {}) {
       Authorization: `Bearer ${token()}`,
       Accept: "application/vnd.github+json",
       "X-GitHub-Api-Version": "2022-11-28",
-      "User-Agent": "panel-ringo",
+      "User-Agent": "tbh-site-engine",
       ...(init.body ? { "Content-Type": "application/json" } : {}),
     },
   });
@@ -35,8 +34,8 @@ async function gh(pathname: string, init: RequestInit = {}) {
 
 export async function readText(p: string): Promise<string> {
   const mode = storageMode();
-  if (mode === "missing") throw new Error("Storage not configured: set GITHUB_TOKEN in Vercel.");
-  if (mode === "local") return fs.readFile(path.join(process.cwd(), p), "utf8");
+  if (mode === "missing") throw new Error("Storage not configured: set GITHUB_TOKEN and GITHUB_REPO.");
+  if (mode === "local") { const { fs, path } = await localFs(); return fs.readFile(path.join(process.cwd(), p), "utf8"); }
   const j = await gh(`/contents/${encodeURI(p)}?ref=${encodeURIComponent(branch())}`);
   if (j.content) return Buffer.from(j.content, "base64").toString("utf8");
   // > 1 MB files come back without inline content
@@ -51,8 +50,9 @@ export async function readJSON<T>(p: string): Promise<T> {
 /** Write several files as ONE commit (GitHub) or plain writes (local). */
 export async function commit(files: FileWrite[], message: string, author?: { name: string; email: string }) {
   const mode = storageMode();
-  if (mode === "missing") throw new Error("Storage not configured: set GITHUB_TOKEN in Vercel.");
+  if (mode === "missing") throw new Error("Storage not configured: set GITHUB_TOKEN and GITHUB_REPO.");
   if (mode === "local") {
+    const { fs, path } = await localFs();
     for (const f of files) {
       const abs = path.join(process.cwd(), f.path);
       await fs.mkdir(path.dirname(abs), { recursive: true });

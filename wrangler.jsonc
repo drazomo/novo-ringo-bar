@@ -1,0 +1,22 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  // Pizzeria Ringo on Cloudflare Workers (TBH agency account). Static pages + images; only /api/panel/* runs in the Worker.
+  "name": "ringopizzeria",
+  "main": "@astrojs/cloudflare/entrypoints/server",
+  "compatibility_date": "2026-11-01",
+  "compatibility_flags": ["nodejs_compat"],
+  // Serve /carta from carta/index.html without redirecting to /carta/ (site uses trailingSlash: "never")
+  "assets": { "html_handling": "drop-trailing-slash", "not_found_handling": "404-page" },
+  "observability": { "enabled": true },
+  "workers_dev": true,
+  // Secrets (wrangler secret put / dashboard): GITHUB_TOKEN (fine-grained, novo-ringo-bar Contents R/W), PANEL_SECRET, RESEND_API_KEY
+  "vars": {
+    "PANEL_ENV": "production",
+    "PANEL_NAME": "Panel Ringo",
+    "GITHUB_REPO": "thebrandinghouse/novo-ringo-bar",
+    "GITHUB_BRANCH": "cloudflare",
+    "SITE_TZ": "Europe/Madrid",
+    "PANEL_EMAILS": "ringobaroe@gmail.com,mark@thebrandinghouseusa.com",
+    "PANEL_MAIL_FROM": "Panel Ringo <panel@ringopizzeria.com>"
+  }
+}

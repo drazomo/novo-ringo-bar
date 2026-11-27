@@ -1,9 +1,10 @@
-// Panel Ringo API. Runs on demand (Vercel function); every other page is static.
+// Owner panel API. Runs on demand (Cloudflare Worker or Vercel function); every other page is static.
 import type { APIRoute } from "astro";
 import crypto from "node:crypto";
 import { readJSON, commit, storageMode } from "../../../lib/server/store";
 import { isAllowed, makeToken, readToken, setSession, currentUser, sameOrigin, sendLoginEmail, COOKIE } from "../../../lib/server/auth";
 import * as M from "../../../lib/server/mutations";
+import { site } from "../../../lib/server/env";
 
 export const prerender = false;
 
@@ -24,7 +25,7 @@ async function persist(s: M.State, files: readonly ("menu" | "hours" | "closures
     { path: M.FILES.changes, content: JSON.stringify(s.changes, null, 2) + "\n" },
     ...extra,
   ];
-  return commit(out, `Panel Ringo: ${summary}`, { name: `Panel Ringo (${who})`, email: who });
+  return commit(out, `${site.panelName()}: ${summary}`, { name: `${site.panelName()} (${who})`, email: who });
 }
 
 const publicState = (s: M.State) => ({

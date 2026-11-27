@@ -13,10 +13,12 @@
     "check:data": "node scripts/check-data.mjs"
   },
   "dependencies": {
+    "@astrojs/cloudflare": "^14.4.9",
     "@astrojs/sitemap": "^3.7.6",
     "@astrojs/vercel": "^11.0.22",
     "astro": "^7.4.13",
     "qrcode": "^1.5.4",
-    "sharp": "^0.35.5"
+    "sharp": "^0.35.5",
+    "wrangler": "^4.169.0"
   }
 }
