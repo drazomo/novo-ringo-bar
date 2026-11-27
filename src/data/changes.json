@@ -1,5 +1,21 @@
 [
   {
+    "id": "8c546522fb",
+    "at": "2026-11-27T22:07:26.109Z",
+    "who": "mark@thebrandinghouseusa.com",
+    "summary": "Deshecho: Cierre 2031-02-01 → 2031-02-02",
+    "kind": "closure",
+    "target": "6804413a",
+    "before": {
+      "id": "6804413a",
+      "from": "2031-02-01",
+      "to": "2031-02-02",
+      "reason": "otro",
+      "msg_es": "Prueba auto-publicación (se deshace)",
+      "msg_en": "Auto-deploy test"
+    }
+  },
+  {
     "id": "5b1301ba2d",
     "at": "2026-11-27T22:07:18.132Z",
     "who": "mark@thebrandinghouseusa.com",
