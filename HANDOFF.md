@@ -37,6 +37,19 @@ Last updated: 22 Nov 2026, by Hermy (TBH) for Mark Rasavong.
 - **Never change `QR_TARGET`** (`https://www.ringopizzeria.com/carta`): printed codes can't be updated. If /carta ever moves, add a redirect instead.
 - The page needs no login, because it only shows public info. It's `noindex`, and robots.txt disallows `/panel`.
 
+## Content updates, 27 Nov 2026 (live)
+- The hours summary now shows the usual opening time plus any extra shifts (`hoursSummary()`). Mattia added Friday/Saturday lunch, 13:00–15:30.
+- Uber Eats was removed everywhere; Glovo is the only delivery channel.
+- New photos from Mattia: the hero (Pesto with burrata), the gallery and the delivery band. Rollback tag: `pre-photos-2026-11-27`.
+- Dish photos from Ringo's own Glovo listing: 14 pizzas/panini, a unique photo for each calzone, and the starters and drinks (those are generic product shots). Rollback tag: `pre-glovo-photos-2026-11-27`.
+- New items from Glovo:
+  - Panino Serrano y Burrata (10,50)
+  - Focaccia con aceite de oliva (4,50)
+  - Focaccia de ajo (4,50)
+  - Coulant de pistacho (7,50)
+- **Their prices are Glovo prices, which are higher than in the restaurant. Mattia should confirm them.**
+- Glovo's coulant photo (chocolate) and beer photo (labelled Amstel, shows Mahou) were rejected as wrong.
+
 ## Undo rules (panel)
 - After every save, the "Guardado" toast shows **Deshacer** for 8 seconds. Inicio lists the last 8 changes.
 - Only the **newest change for each thing** can be undone. A "thing" is one dish, one closure, the hours, or the categories. The server enforces this (`changeKey` in `mutations.ts`), because undoing an older change would silently wipe out newer edits. An undo row offers **Rehacer**.
