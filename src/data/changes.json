@@ -1,5 +1,14 @@
 [
   {
+    "id": "5b1301ba2d",
+    "at": "2026-11-27T22:07:18.132Z",
+    "who": "mark@thebrandinghouseusa.com",
+    "summary": "Cierre 2031-02-01 → 2031-02-02",
+    "kind": "closure",
+    "target": "6804413a",
+    "before": null
+  },
+  {
     "id": "1072147e26",
     "at": "2026-11-27T21:59:00.610Z",
     "who": "mark@thebrandinghouseusa.com",
