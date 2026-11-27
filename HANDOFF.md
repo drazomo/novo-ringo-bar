@@ -50,6 +50,13 @@ Last updated: 22 Nov 2026, by Hermy (TBH) for Mark Rasavong.
 - **Their prices are Glovo prices, which are higher than in the restaurant. Mattia should confirm them.**
 - Glovo's coulant photo (chocolate) and beer photo (labelled Amstel, shows Mahou) were rejected as wrong.
 
+## Rebrand: Ringo Bar → Pizzería Ringo (live 27 Nov 2026)
+- `site.json` `name`/`shortName` = "Pizzería Ringo". All copy, titles, alt text, manifest, panel and QR sheets now use it.
+- JSON-LD `alternateName` keeps "Ringo Bar", "Pizzería Ringo Bar" and "Ringo Pizzeria y Panini Italiani" so searches for the old name still match.
+- On screens ≤900px the header stacks the open/closed status under the name, because the longer name didn't fit on one row.
+- Still to do outside the site: the logo image still reads "RINGO BAR"; the Google Business Profile name should become "Pizzería Ringo" (NAP consistency); Instagram is still @ringobar_.
+- Rollback tag: `pre-rename-2026-11-27`.
+
 ## Undo rules (panel)
 - After every save, the "Guardado" toast shows **Deshacer** for 8 seconds. Inicio lists the last 8 changes.
 - Only the **newest change for each thing** can be undone. A "thing" is one dish, one closure, the hours, or the categories. The server enforces this (`changeKey` in `mutations.ts`), because undoing an older change would silently wipe out newer edits. An undo row offers **Rehacer**.
