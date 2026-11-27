@@ -2,7 +2,7 @@
 import "../styles/carta.css";
 import { Image, getImage } from "astro:assets";
 import Base from "../layouts/Base.astro";
-import { site, menu, visibleCats, nameOf, descOf, catName, priceLabel, photoOf, openDaysPhrase, earliestOpen, lastUpdated, fmtDate, type Lang } from "../lib/data";
+import { site, menu, visibleCats, nameOf, descOf, catName, priceLabel, photoOf, hoursSummary, lastUpdated, fmtDate, type Lang } from "../lib/data";
 import { T, ROUTES } from "../lib/i18n";
 import { restaurant, menuSchema, breadcrumbs, graph } from "../lib/seo";
 import hero from "../assets/site/p4.jpg";
@@ -45,8 +45,8 @@ for (const i of cats.flatMap((c) => c.items)) {
       <nav class="crumbs" aria-label={es ? "Migas de pan" : "Breadcrumb"}><a href={R.home}>{es ? "Inicio" : "Home"}</a> / <span aria-current="page">{t.navCarta}</span></nav>
       <h1>{es ? <Fragment>La <em>carta</em></Fragment> : <Fragment>Our <em>menu</em></Fragment>}</h1>
       <p class="lede">{es
-        ? `Pizza italiana en Campanar, València: ${n("pizzas")} pizzas, ${n("calzones")} calzones, entrantes, paninis y postres. Precios en el local, IVA incluido. Abrimos ${openDaysPhrase("es")} desde las ${earliestOpen()}.`
-        : `Italian pizza in Campanar, Valencia: ${n("pizzas")} pizzas, ${n("calzones")} calzones, starters, panini and desserts. In-restaurant prices, VAT included. Open ${openDaysPhrase("en")} from ${earliestOpen()}.`}</p>
+        ? `Pizza italiana en Campanar, València: ${n("pizzas")} pizzas, ${n("calzones")} calzones, entrantes, paninis y postres. Precios en el local, IVA incluido. Abrimos ${hoursSummary("es")}.`
+        : `Italian pizza in Campanar, Valencia: ${n("pizzas")} pizzas, ${n("calzones")} calzones, starters, panini and desserts. In-restaurant prices, VAT included. Open ${hoursSummary("en")}.`}</p>
       <ul class="meta">
         <li><span class="status" data-status><span class="dot"></span><span data-status-text>{t.statusFallback}</span></span></li>
         <li>{t.today}&nbsp;<span data-today>–</span></li>

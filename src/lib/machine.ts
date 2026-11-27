@@ -1,5 +1,5 @@
 // Machine-readable files for search engines and AI assistants (generated from the same data as the pages).
-import { site, hours, closures, visibleCats, nameOf, descOf, catName, priceLabel, minPrice, eur, DAYS, openDaysPhrase, earliestOpen, lastUpdated, type Lang } from "./data";
+import { site, hours, closures, visibleCats, nameOf, descOf, catName, priceLabel, minPrice, eur, DAYS, hoursSummary, lastUpdated, type Lang } from "./data";
 
 const hoursMd = (l: Lang) =>
   DAYS[l].map((d, i) => `- ${d[0].toUpperCase() + d.slice(1)}: ${hours.week[i].length ? hours.week[i].map((s) => s.join("–")).join(", ") : l === "es" ? "cerrado" : "closed"}`).join("\n");
@@ -33,7 +33,7 @@ export function llmsTxt() {
 
 - Address: ${site.address.street}, ${site.address.postalCode} ${site.address.city}, Spain
 - Phone: ${site.phoneDisplay} (${site.phone})
-- Open ${openDaysPhrase("en")} from ${earliestOpen()} (Europe/Madrid)
+- Open ${hoursSummary("en")} (Europe/Madrid)
 - Price range: ${site.priceRange} (pizzas €${eur(Math.min(...pz))}–€${eur(Math.max(...pz))} in the restaurant)
 - Delivery: Glovo ${site.glovo} · Uber Eats ${site.ubereats}
 - Instagram: ${site.instagram}

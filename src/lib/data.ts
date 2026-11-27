@@ -71,6 +71,37 @@ export function openDaysPhrase(l: Lang) {
 }
 export const earliestOpen = () => hours.week.flat().map((s) => s[0]).sort()[0] || "";
 
+const listJoin = (xs: string[], l: Lang) => xs.length < 2 ? xs.join("") : `${xs.slice(0, -1).join(", ")} ${l === "es" ? "y" : "and"} ${xs.at(-1)}`;
+
+/** The usual opening time: the shift start shared by the most open days (ties → the later one, i.e. the evening). */
+export function mainOpen() {
+  const n = new Map<string, number>();
+  for (const day of hours.week) for (const s of new Set(day.map((x) => x[0]))) n.set(s, (n.get(s) ?? 0) + 1);
+  return [...n].sort((a, b) => b[1] - a[1] || b[0].localeCompare(a[0]))[0]?.[0] ?? "";
+}
+
+/**
+ * Honest one-line hours summary, e.g.
+ * "de martes a sábado desde las 19:00 (viernes y sábado, también de 13:00 a 15:30)".
+ * Using the earliest time of the week ("desde las 13:00") misleads when only some days open at lunch.
+ */
+export function hoursSummary(l: Lang) {
+  const days = openDaysPhrase(l), from = mainOpen();
+  if (!days) return "";
+  const D = DAYS[l], extra = new Map<string, number[]>();
+  hours.week.forEach((day, i) => {
+    if (!day.length) return;
+    const others = day.some((s) => s[0] === from) ? day.filter((s) => s[0] !== from) : day;
+    for (const [a, b] of others) { const k = `${a}|${b}`; extra.set(k, [...(extra.get(k) ?? []), i]); }
+  });
+  const notes = [...extra].map(([k, idx]) => {
+    const [a, b] = k.split("|"), who = listJoin(idx.map((i) => D[i]), l);
+    return l === "es" ? `${who}, también de ${a} a ${b}` : `${who} also ${a}–${b}`;
+  });
+  const base = l === "es" ? `${days} desde las ${from}` : `${days} from ${from}`;
+  return notes.length ? `${base} (${notes.join("; ")})` : base;
+}
+
 export const lastUpdated = () => {
   const d = changes.length ? changes[0].at : null;
   return d ? new Date(d) : new Date();
