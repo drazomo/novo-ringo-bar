@@ -120,6 +120,13 @@ for (const i of cats.flatMap((c) => c.items)) {
     </div>
   </div>
 
+  <aside class="rev-ask" aria-label={es ? "Reseñas" : "Reviews"}>
+    <div class="wrap">
+      <p><b>{es ? "¿Has comido con nosotros?" : "Eaten with us?"}</b> {es ? "Una reseña en Google nos ayuda muchísimo." : "A Google review helps us a lot."}</p>
+      <a class="btn btn-ghost" href={site.reviews} target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-star"/></svg>{es ? "Escribir una reseña" : "Write a review"}</a>
+    </div>
+  </aside>
+
   <section class="order" aria-labelledby="order-h">
     <div class="wrap">
       <div>

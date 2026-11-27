@@ -2,7 +2,7 @@
 import "../styles/home.css";
 import { Image, getImage } from "astro:assets";
 import Base from "../layouts/Base.astro";
-import { site, menu, hours, visibleCats, nameOf, descOf, catName, priceLabel, minPrice, eur, DAYS, openDaysPhrase, hoursSummary, photoOf, type Lang } from "../lib/data";
+import { site, menu, hours, visibleCats, nameOf, descOf, catName, priceLabel, minPrice, eur, DAYS, openDaysPhrase, hoursSummary, lunchPhrase, mainOpen as mainOpenTime, photoOf, type Lang } from "../lib/data";
 import { T, ROUTES } from "../lib/i18n";
 import { restaurant, website, breadcrumbs, faq, graph } from "../lib/seo";
 import hero from "../assets/site/p4.jpg";
@@ -24,6 +24,9 @@ const cats = visibleCats();
 const count = (id: string) => cats.find((c) => c.id === id)?.items.length ?? 0;
 const days = openDaysPhrase(lang);
 const when = hoursSummary(lang);
+const lunch = lunchPhrase(lang);
+const mainOpen = mainOpenTime();
+const fromPizza = Math.min(...menu.items.filter((i) => i.cat === "pizzas" && i.status !== "off").map(minPrice).filter((p) => p > 0));
 const picks = menu.items.filter((i) => i.status !== "off" && (i.tags.includes("casa") || i.tags.includes("top")))
   .concat(menu.items.filter((i) => i.status !== "off" && i.cat === "pizzas" && !i.tags.includes("casa") && !i.tags.includes("top")))
   .slice(0, 5);
@@ -46,12 +49,14 @@ const closedDays = DAYS[lang].filter((_, d) => !hours.week[d].length);
 const QA: [string, string][] = es ? [
   ["¿Dónde está la Pizzería Ringo Bar?", `En ${site.address.street}, ${site.address.postalCode} ${site.address.city}, en el barrio de Campanar. Teléfono: ${site.phoneDisplay}.`],
   ["¿Cuál es el horario?", `Abrimos ${when}. ${DAYS.es.map((d, i) => `${d[0].toUpperCase() + d.slice(1)}: ${hoursLine(i)}`).join(". ")}.`],
+  ["¿Abrís a mediodía?", lunch ? `Sí: ${lunch}. Por la noche abrimos ${days} desde las ${mainOpen}.` : `No, abrimos por la noche, desde las ${mainOpen}.`],
   ["¿Hacéis pizza a domicilio?", `Sí. Puedes pedir a domicilio por Glovo y por Uber Eats, o llamar al ${site.phoneDisplay} y recogerla en el local. En las apps los precios pueden ser distintos a los del local.`],
   ["¿Tenéis pizzas sin carne?", `Sí: ${meatFree.join(", ")}. Si tienes alguna alergia o intolerancia, pregunta al personal antes de pedir.`],
   ["¿Cuánto cuesta una pizza?", `Las pizzas van de ${eur(Math.min(...cats.find((c) => c.id === "pizzas")!.items.map(minPrice)))} € a ${eur(Math.max(...cats.find((c) => c.id === "pizzas")!.items.map(minPrice)))} € en el local. La carta completa con precios está en ringopizzeria.com/carta.`],
 ] : [
   ["Where is Ringo Bar pizzeria?", `At ${site.address.street}, ${site.address.postalCode} ${site.address.city}, in the Campanar neighbourhood. Phone: ${site.phoneDisplay}.`],
   ["What are the opening hours?", `We're open ${when}. ${DAYS.en.map((d, i) => `${d}: ${hoursLine(i)}`).join(". ")}.`],
+  ["Are you open at lunchtime?", lunch ? `Yes: ${lunch}. In the evening we're open ${days} from ${mainOpen}.` : `No, we open in the evening, from ${mainOpen}.`],
   ["Do you deliver?", `Yes. Order delivery on Glovo or Uber Eats, or call ${site.phoneDisplay} and pick it up. App prices may differ from in-restaurant prices.`],
   ["Do you have meat-free pizzas?", `Yes: ${meatFree.join(", ")}. If you have an allergy or intolerance, please ask our staff before ordering.`],
   ["How much is a pizza?", `Pizzas cost from €${eur(Math.min(...cats.find((c) => c.id === "pizzas")!.items.map(minPrice)))} to €${eur(Math.max(...cats.find((c) => c.id === "pizzas")!.items.map(minPrice)))} in the restaurant. The full menu with prices is at ringopizzeria.com/en/menu.`],
@@ -88,6 +93,7 @@ const gallery = [
           <div><dt>{t.today}</dt><dd data-today>{hoursLine(1)}</dd></div>
           <div><dt>{es ? "Dirección" : "Address"}</dt><dd><a href={site.directions}>{site.address.street.replace("Carrer de ", "C/ ")}</a></dd></div>
           <div><dt>{es ? "Teléfono" : "Phone"}</dt><dd><a href={`tel:${site.phone}`}>{site.phoneDisplay}</a></dd></div>
+          <div><dt>{es ? "Pizzas" : "Pizzas"}</dt><dd><a href={R.carta}>{es ? `desde ${eur(fromPizza)} €` : `from ${eur(fromPizza)} €`}</a></dd></div>
         </dl>
       </div>
       <div class="hero-photo">
@@ -165,6 +171,22 @@ const gallery = [
       <div class="insta">
         <span>{site.instagramHandle} {es ? "en Instagram" : "on Instagram"}</span>
         <a class="btn btn-ghost" href={site.instagram} rel="noopener">{es ? "Ver Instagram" : "See Instagram"} <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="reviews" aria-labelledby="rev-h">
+    <div class="wrap">
+      <div>
+        <p class="eyebrow">{es ? "Reseñas en Google" : "Google reviews"}</p>
+        <h2 id="rev-h">{es ? <Fragment>¿Ya has probado <em>nuestra pizza?</em></Fragment> : <Fragment>Tried <em>our pizza?</em></Fragment>}</h2>
+        <p>{es
+          ? `Tu reseña en Google ayuda a otros vecinos de ${site.address.neighbourhood} a encontrarnos. Tardas un minuto, y a ${site.pizzaiolo} le alegra el día.`
+          : `A Google review helps other people in Valencia find us. It takes a minute, and it makes ${site.pizzaiolo}'s day.`}</p>
+      </div>
+      <div class="rev-ctas">
+        <a class="btn btn-primary" href={site.reviews} target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-star"/></svg>{es ? "Escribir una reseña" : "Write a review"}</a>
+        <a class="btn btn-ghost" href={site.maps} target="_blank" rel="noopener">{es ? "Leer reseñas" : "Read reviews"} <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
       </div>
     </div>
   </section>

@@ -71,6 +71,13 @@ export function openDaysPhrase(l: Lang) {
 }
 export const earliestOpen = () => hours.week.flat().map((s) => s[0]).sort()[0] || "";
 
+/** Open days that have a shift starting before 16:00, e.g. "viernes y sábado, de 13:00 a 15:30". */
+export function lunchPhrase(l: Lang) {
+  const by = new Map<string, number[]>();
+  hours.week.forEach((day, i) => day.filter((s) => s[0] < "16:00").forEach(([a, b]) => { const k = `${a}|${b}`; by.set(k, [...(by.get(k) ?? []), i]); }));
+  return [...by].map(([k, idx]) => { const [a, b] = k.split("|"); const who = listJoin(idx.map((i) => DAYS[l][i]), l); return l === "es" ? `${who}, de ${a} a ${b}` : `${who}, ${a}–${b}`; }).join("; ");
+}
+
 const listJoin = (xs: string[], l: Lang) => xs.length < 2 ? xs.join("") : `${xs.slice(0, -1).join(", ")} ${l === "es" ? "y" : "and"} ${xs.at(-1)}`;
 
 /** The usual opening time: the shift start shared by the most open days (ties → the later one, i.e. the evening). */
