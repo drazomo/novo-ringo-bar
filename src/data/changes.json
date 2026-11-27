@@ -1,5 +1,21 @@
 [
   {
+    "id": "1072147e26",
+    "at": "2026-11-27T21:59:00.610Z",
+    "who": "mark@thebrandinghouseusa.com",
+    "summary": "Deshecho: Cierre 2031-01-01 → 2031-01-02",
+    "kind": "closure",
+    "target": "3a879765",
+    "before": {
+      "id": "3a879765",
+      "from": "2031-01-01",
+      "to": "2031-01-02",
+      "reason": "otro",
+      "msg_es": "Prueba Cloudflare TBH (se deshace)",
+      "msg_en": "Cloudflare test"
+    }
+  },
+  {
     "id": "7bd0b4a0b5",
     "at": "2026-11-27T21:58:53.577Z",
     "who": "mark@thebrandinghouseusa.com",
