@@ -14,8 +14,8 @@ const closuresMd = (l: Lang) => {
 export function menuMarkdown(l: Lang) {
   const es = l === "es";
   const head = es
-    ? `# Carta de la Pizzería Ringo Bar (València)\n\nPizzería italiana en ${site.address.street}, ${site.address.postalCode} ${site.address.city} (barrio de Campanar). Teléfono ${site.phoneDisplay}. Precios en el local, IVA incluido; en Glovo y Uber Eats pueden variar. Actualizada: ${lastUpdated().toISOString().slice(0, 10)}.\n`
-    : `# Ringo Bar Pizzeria menu (Valencia)\n\nItalian pizzeria at ${site.address.street}, ${site.address.postalCode} ${site.address.city} (Campanar). Phone ${site.phoneDisplay}. In-restaurant prices, VAT included; Glovo and Uber Eats prices may differ. Updated: ${lastUpdated().toISOString().slice(0, 10)}.\n`;
+    ? `# Carta de la Pizzería Ringo Bar (València)\n\nPizzería italiana en ${site.address.street}, ${site.address.postalCode} ${site.address.city} (barrio de Campanar). Teléfono ${site.phoneDisplay}. Precios en el local, IVA incluido; en Glovo pueden variar. Actualizada: ${lastUpdated().toISOString().slice(0, 10)}.\n`
+    : `# Ringo Bar Pizzeria menu (Valencia)\n\nItalian pizzeria at ${site.address.street}, ${site.address.postalCode} ${site.address.city} (Campanar). Phone ${site.phoneDisplay}. In-restaurant prices, VAT included; Glovo prices may differ. Updated: ${lastUpdated().toISOString().slice(0, 10)}.\n`;
   const body = visibleCats().map((c) =>
     `\n## ${catName(c, l)}\n\n` + c.items.map((i) => {
       const d = descOf(i, l);
@@ -29,13 +29,13 @@ export function llmsTxt() {
   const pz = (visibleCats().find((c) => c.id === "pizzas")?.items ?? []).map(minPrice);
   return `# ${site.name}
 
-> Italian pizzeria in València, Spain (Campanar neighbourhood): ${visibleCats().find((c) => c.id === "pizzas")?.items.length ?? ""} pizzas, calzones, starters, panini and desserts. Eat in, pick up, or order delivery on Glovo and Uber Eats. Pizzería italiana en Campanar, València.
+> Italian pizzeria in València, Spain (Campanar neighbourhood): ${visibleCats().find((c) => c.id === "pizzas")?.items.length ?? ""} pizzas, calzones, starters, panini and desserts. Eat in, pick up, or order delivery on Glovo. Pizzería italiana en Campanar, València.
 
 - Address: ${site.address.street}, ${site.address.postalCode} ${site.address.city}, Spain
 - Phone: ${site.phoneDisplay} (${site.phone})
 - Open ${hoursSummary("en")} (Europe/Madrid)
 - Price range: ${site.priceRange} (pizzas €${eur(Math.min(...pz))}–€${eur(Math.max(...pz))} in the restaurant)
-- Delivery: Glovo ${site.glovo} · Uber Eats ${site.ubereats}
+- Delivery: Glovo ${site.glovo}
 - Instagram: ${site.instagram}
 
 ## Opening hours

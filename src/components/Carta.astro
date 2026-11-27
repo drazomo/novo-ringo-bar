@@ -5,7 +5,7 @@ import Base from "../layouts/Base.astro";
 import { site, menu, visibleCats, nameOf, descOf, catName, priceLabel, photoOf, hoursSummary, lastUpdated, fmtDate, type Lang } from "../lib/data";
 import { T, ROUTES } from "../lib/i18n";
 import { restaurant, menuSchema, breadcrumbs, graph } from "../lib/seo";
-import hero from "../assets/site/p4.jpg";
+import hero from "../assets/site/hero-pesto-burrata.jpg";
 import logo from "../assets/site/logo.png";
 
 interface Props { lang: Lang }
@@ -115,8 +115,8 @@ for (const i of cats.flatMap((c) => c.items)) {
       ))}
       <p class="empty" id="empty">{es ? "No hay nada con ese nombre. Prueba con otro ingrediente." : "Nothing matches that. Try another ingredient."}</p>
       <p class="legal">{es
-        ? "Precios en el local, IVA incluido. En Glovo y Uber Eats los precios pueden ser distintos. ¿Alergias o intolerancias? Pregunta al personal: te informamos de los alérgenos de cada plato."
-        : "In-restaurant prices, VAT included. Prices on Glovo and Uber Eats may differ. Allergies or intolerances? Ask our staff about the allergens in each dish."}</p>
+        ? "Precios en el local, IVA incluido. En Glovo los precios pueden ser distintos. ¿Alergias o intolerancias? Pregunta al personal: te informamos de los alérgenos de cada plato."
+        : "In-restaurant prices, VAT included. Prices on Glovo may differ. Allergies or intolerances? Ask our staff about the allergens in each dish."}</p>
     </div>
   </div>
 
@@ -131,11 +131,10 @@ for (const i of cats.flatMap((c) => c.items)) {
     <div class="wrap">
       <div>
         <h2 id="order-h">{es ? <Fragment>¿Pizza en casa <em>esta noche?</em></Fragment> : <Fragment>Pizza at home <em>tonight?</em></Fragment>}</h2>
-        <p>{es ? "Pídela por Glovo o Uber Eats. Para recoger en el local, llámanos." : "Order on Glovo or Uber Eats. For pick-up, give us a call."}</p>
+        <p>{es ? "Pídela por Glovo. Para recoger en el local, llámanos." : "Order on Glovo. For pick-up, give us a call."}</p>
       </div>
       <div class="order-ctas">
         <a class="btn btn-white order-cta" href={site.glovo} target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-bag"/></svg>{t.glovo}</a>
-        <a class="btn btn-light order-cta" href={site.ubereats} target="_blank" rel="noopener">{t.uber} <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
         <a class="btn btn-light" href={`tel:${site.phone}`}><svg aria-hidden="true"><use href="#i-phone"/></svg>{t.pickup}{site.phoneDisplay}</a>
       </div>
     </div>

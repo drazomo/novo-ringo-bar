@@ -5,15 +5,16 @@ import Base from "../layouts/Base.astro";
 import { site, menu, hours, visibleCats, nameOf, descOf, catName, priceLabel, minPrice, eur, DAYS, openDaysPhrase, hoursSummary, lunchPhrase, mainOpen as mainOpenTime, photoOf, type Lang } from "../lib/data";
 import { T, ROUTES } from "../lib/i18n";
 import { restaurant, website, breadcrumbs, faq, graph } from "../lib/seo";
-import hero from "../assets/site/p4.jpg";
+import hero from "../assets/site/hero-pesto-burrata.jpg";
 import picksPhoto from "../assets/site/p1.jpg";
 import logo from "../assets/site/logo.png";
 import mapImg from "../assets/site/map.webp";
-import g1 from "../assets/site/p7.jpg";
+import g1 from "../assets/site/mesa-calabacin-burrata.jpg";
 import g2 from "../assets/site/p8.jpg";
-import g3 from "../assets/site/p3.jpg";
-import g4 from "../assets/site/p6.jpg";
+import g3 from "../assets/site/pesto-burrata-plato.jpg";
+import g4 from "../assets/site/p7.jpg";
 import g5 from "../assets/site/p5.jpg";
+import boxPhoto from "../assets/site/caja-vegetal.jpg";
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
@@ -37,12 +38,12 @@ const title = es
   ? "Pizzería italiana en Valencia (Campanar) · Ringo Bar | Pizza a domicilio"
   : "Italian pizzeria in Valencia (Campanar) · Ringo Bar | Pizza delivery";
 const description = es
-  ? `Pizzería Ringo Bar: auténtica pizza italiana en Campanar, València. ${count("pizzas")} pizzas y ${count("calzones")} calzones. Abierto ${when}. Pide a domicilio por Glovo o Uber Eats.`
-  : `Ringo Bar: authentic Italian pizza in Campanar, Valencia. ${count("pizzas")} pizzas and ${count("calzones")} calzones. Open ${when}. Order delivery on Glovo or Uber Eats.`;
+  ? `Pizzería Ringo Bar: auténtica pizza italiana en Campanar, València. ${count("pizzas")} pizzas y ${count("calzones")} calzones. Abierto ${when}. Pide a domicilio por Glovo.`
+  : `Ringo Bar: authentic Italian pizza in Campanar, Valencia. ${count("pizzas")} pizzas and ${count("calzones")} calzones. Open ${when}. Order delivery on Glovo.`;
 
 const intro = es
-  ? `Ringo Bar es una pizzería italiana en el barrio de Campanar, en ${site.address.street}, ${site.address.city}. Nuestro pizzaiolo, ${site.pizzaiolo}, prepara ${count("pizzas")} pizzas y ${count("calzones")} calzones, además de entrantes, paninis y postres. Abrimos ${when}: para comer en el local, recoger o pedir a domicilio por Glovo y Uber Eats.`
-  : `Ringo Bar is an Italian pizzeria in the Campanar neighbourhood of Valencia, at ${site.address.street}. Our pizzaiolo, ${site.pizzaiolo}, makes ${count("pizzas")} pizzas and ${count("calzones")} calzones, plus starters, panini and desserts. We're open ${when}: eat in, pick up, or order delivery on Glovo and Uber Eats.`;
+  ? `Ringo Bar es una pizzería italiana en el barrio de Campanar, en ${site.address.street}, ${site.address.city}. Nuestro pizzaiolo, ${site.pizzaiolo}, prepara ${count("pizzas")} pizzas y ${count("calzones")} calzones, además de entrantes, paninis y postres. Abrimos ${when}: para comer en el local, recoger o pedir a domicilio por Glovo.`
+  : `Ringo Bar is an Italian pizzeria in the Campanar neighbourhood of Valencia, at ${site.address.street}. Our pizzaiolo, ${site.pizzaiolo}, makes ${count("pizzas")} pizzas and ${count("calzones")} calzones, plus starters, panini and desserts. We're open ${when}: eat in, pick up, or order delivery on Glovo.`;
 
 const hoursLine = (d: number) => (hours.week[d].length ? hours.week[d].map((s) => s.join(" – ")).join(" · ") : t.closedDay);
 const closedDays = DAYS[lang].filter((_, d) => !hours.week[d].length);
@@ -50,14 +51,14 @@ const QA: [string, string][] = es ? [
   ["¿Dónde está la Pizzería Ringo Bar?", `En ${site.address.street}, ${site.address.postalCode} ${site.address.city}, en el barrio de Campanar. Teléfono: ${site.phoneDisplay}.`],
   ["¿Cuál es el horario?", `Abrimos ${when}. ${DAYS.es.map((d, i) => `${d[0].toUpperCase() + d.slice(1)}: ${hoursLine(i)}`).join(". ")}.`],
   ["¿Abrís a mediodía?", lunch ? `Sí: ${lunch}. Por la noche abrimos ${days} desde las ${mainOpen}.` : `No, abrimos por la noche, desde las ${mainOpen}.`],
-  ["¿Hacéis pizza a domicilio?", `Sí. Puedes pedir a domicilio por Glovo y por Uber Eats, o llamar al ${site.phoneDisplay} y recogerla en el local. En las apps los precios pueden ser distintos a los del local.`],
+  ["¿Hacéis pizza a domicilio?", `Sí. Puedes pedir a domicilio por Glovo, o llamar al ${site.phoneDisplay} y recogerla en el local. En Glovo los precios pueden ser distintos a los del local.`],
   ["¿Tenéis pizzas sin carne?", `Sí: ${meatFree.join(", ")}. Si tienes alguna alergia o intolerancia, pregunta al personal antes de pedir.`],
   ["¿Cuánto cuesta una pizza?", `Las pizzas van de ${eur(Math.min(...cats.find((c) => c.id === "pizzas")!.items.map(minPrice)))} € a ${eur(Math.max(...cats.find((c) => c.id === "pizzas")!.items.map(minPrice)))} € en el local. La carta completa con precios está en ringopizzeria.com/carta.`],
 ] : [
   ["Where is Ringo Bar pizzeria?", `At ${site.address.street}, ${site.address.postalCode} ${site.address.city}, in the Campanar neighbourhood. Phone: ${site.phoneDisplay}.`],
   ["What are the opening hours?", `We're open ${when}. ${DAYS.en.map((d, i) => `${d}: ${hoursLine(i)}`).join(". ")}.`],
   ["Are you open at lunchtime?", lunch ? `Yes: ${lunch}. In the evening we're open ${days} from ${mainOpen}.` : `No, we open in the evening, from ${mainOpen}.`],
-  ["Do you deliver?", `Yes. Order delivery on Glovo or Uber Eats, or call ${site.phoneDisplay} and pick it up. App prices may differ from in-restaurant prices.`],
+  ["Do you deliver?", `Yes. Order delivery on Glovo, or call ${site.phoneDisplay} and pick it up. Glovo prices may differ from in-restaurant prices.`],
   ["Do you have meat-free pizzas?", `Yes: ${meatFree.join(", ")}. If you have an allergy or intolerance, please ask our staff before ordering.`],
   ["How much is a pizza?", `Pizzas cost from €${eur(Math.min(...cats.find((c) => c.id === "pizzas")!.items.map(minPrice)))} to €${eur(Math.max(...cats.find((c) => c.id === "pizzas")!.items.map(minPrice)))} in the restaurant. The full menu with prices is at ringopizzeria.com/en/menu.`],
 ];
@@ -71,10 +72,10 @@ const jsonld = graph(
   faq(QA),
 );
 const gallery = [
-  [g1, "g-a", es ? "Pizza blanca recién horneada sobre mármol" : "White pizza fresh from the oven on marble"],
+  [g1, "g-a", es ? "Pizza con calabacín, tomate cherry, burrata y albahaca, con una cerveza en la mesa" : "Pizza with courgette, cherry tomatoes, burrata and basil, with a beer at the table"],
   [g2, "g-b", es ? "Pizza con jamón serrano y albahaca" : "Pizza with serrano ham and basil"],
-  [g3, "g-c", es ? "Pizza de tomate con albahaca" : "Tomato pizza with basil"],
-  [g4, "g-d", es ? "Pizza de tomate servida en mesa" : "Tomato pizza served at the table"],
+  [g3, "g-c", es ? "Pizza Pesto con burrata, tomate cherry y albahaca" : "Pesto pizza with burrata, cherry tomatoes and basil"],
+  [g4, "g-d", es ? "Pizza blanca recién horneada sobre mármol" : "White pizza fresh from the oven on marble"],
   [g5, "g-e", es ? "Pizza con jamón york y champiñones" : "Pizza with ham and mushrooms"],
 ] as const;
 ---
@@ -97,7 +98,7 @@ const gallery = [
         </dl>
       </div>
       <div class="hero-photo">
-        <Image src={hero} alt={es ? "Pizza con tomate, mozzarella fresca y albahaca recién salida del horno" : "Pizza with tomato, fresh mozzarella and basil, straight from the oven"} widths={[480, 720, 960, 1200]} sizes="(max-width: 980px) 100vw, 560px" loading="eager" fetchpriority="high" />
+        <Image src={hero} alt={es ? "Pizza Pesto de Ringo Bar: burrata, pesto, tomate cherry y albahaca, recién salida del horno" : "Ringo Bar Pesto pizza: burrata, pesto, cherry tomatoes and basil, straight from the oven"} widths={[480, 720, 960, 1200]} sizes="(max-width: 980px) 100vw, 560px" loading="eager" fetchpriority="high" />
         <div class="badge"><Image src={logo} alt={es ? "Logotipo de la Pizzería Ringo Bar" : "Ringo Bar Pizzeria logo"} width={192} /></div>
       </div>
     </div>
@@ -144,14 +145,14 @@ const gallery = [
   </section>
 
   <section class="order" id="pedir" aria-labelledby="order-h">
-    <div class="wrap">
+    <div class="wrap has-photo">
+      <figure class="order-photo"><Image src={boxPhoto} alt={es ? "Pizza vegetal de Ringo Bar en su caja, lista para llevar" : "Ringo Bar vegetable pizza in its box, ready to go"} widths={[480, 720, 960]} sizes="(max-width: 980px) 100vw, 380px" /></figure>
       <div>
         <h2 id="order-h">{es ? <Fragment>¿Pizza en casa <em>esta noche?</em></Fragment> : <Fragment>Pizza at home <em>tonight?</em></Fragment>}</h2>
-        <p>{es ? `Pídela por Glovo o Uber Eats y te la llevan a casa ${when}. Para recoger en el local, llámanos.` : `Order on Glovo or Uber Eats and get it delivered ${when}. For pick-up, give us a call.`}</p>
+        <p>{es ? `Pídela por Glovo y te la llevan a casa ${when}. Para recoger en el local, llámanos.` : `Order on Glovo and get it delivered ${when}. For pick-up, give us a call.`}</p>
       </div>
       <div class="ctas order-ctas">
         <a class="btn btn-white order-cta" href={site.glovo} target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-bag"/></svg>{t.glovo}</a>
-        <a class="btn btn-light order-cta" href={site.ubereats} target="_blank" rel="noopener">{t.uber} <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
         <a class="btn btn-light" href={`tel:${site.phone}`}><svg aria-hidden="true"><use href="#i-phone"/></svg>{t.pickup}{site.phoneDisplay}</a>
       </div>
     </div>

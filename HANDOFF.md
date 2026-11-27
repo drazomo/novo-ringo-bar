@@ -26,7 +26,7 @@ Last updated: 22 Nov 2026, by Hermy (TBH) for Mark Rasavong.
 6. After launch:
    - Google Search Console: add the property and submit `sitemap-index.xml`.
    - Bing Webmaster Tools: import from Search Console. ChatGPT search relies on Bing.
-   - Google Business Profile: website = https://www.ringopizzeria.com, menu link = https://www.ringopizzeria.com/carta, order links = Glovo / Uber Eats.
+   - Google Business Profile: website = https://www.ringopizzeria.com, menu link = https://www.ringopizzeria.com/carta, order link = Glovo (Ringo stopped using Uber Eats, Nov 2026).
    - Vercel: turn on Web Analytics.
    - Optional: delete the leftover branch-specific Preview (v3) copies of PANEL_SECRET / PANEL_MAIL_FROM in Vercel. They are harmless.
 
@@ -45,7 +45,7 @@ Last updated: 22 Nov 2026, by Hermy (TBH) for Mark Rasavong.
 ## Not built yet (needs access first)
 - **Google Business Profile sync** for hours and closures. Needs Google's approval for Business Profile API access, plus Mattia adding TBH as a manager of his profile. Until then the panel labels Google as "Pendiente".
 - **Automatic Instagram posting.** Needs @ringobar_ to be a Business account and a Meta app with publishing permission. For now the panel generates the branded story image and Mattia shares it with one tap.
-- **Glovo / Uber Eats**: their APIs are partner-only, so the panel links Mattia straight to their merchant apps.
+- **Glovo**: its API is partner-only, so the panel links Mattia straight to the Glovo merchant app. (Uber Eats was removed in Nov 2026: Ringo no longer uses it.)
 - **Automatic English translation** of new dishes. The English fields are optional; when they're empty, the EN pages show the Spanish text. This could be added with a DeepL key.
 
 ## Data decisions taken during the import

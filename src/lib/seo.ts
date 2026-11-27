@@ -33,8 +33,8 @@ export function restaurant(l: Lang, imageUrl: string, logoUrl: string) {
     openingHoursSpecification: ohs,
     ...(special.length ? { specialOpeningHoursSpecification: special } : {}),
     hasMenu: abs(ROUTES[l].carta),
-    sameAs: [site.instagram, site.facebook, site.glovo, site.ubereats],
-    potentialAction: { "@type": "OrderAction", target: [site.glovo, site.ubereats] },
+    sameAs: [site.instagram, site.facebook, site.glovo],
+    potentialAction: { "@type": "OrderAction", target: [site.glovo] },
   };
 }
 
